@@ -33,37 +33,37 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
 
-    // 而ㅻ�ㅻ땲�떚 �솃 �럹�씠吏� �몴�떆
+    // �뚣끇占썬끇�빍占쎈뼒 占쎌냳 占쎈읂占쎌뵠筌욑옙 占쎈ご占쎈뻻  skld;sad
     @GetMapping("/communityHome")
     public String showCommunityHome() {
-        return "board/communityHome"; // communityHome.jsp
+        return "board/communityHome"; // communityHome.jsp sdsd
     }
 
-    // 寃뚯떆湲� �옉�꽦 �럹�씠吏� �몴�떆ㅊㅌㅍㅎㅍㅌㅀㅍㄴㅌㄿ
+    // 野껊슣�뻻疫뀐옙 占쎌삂占쎄쉐 占쎈읂占쎌뵠筌욑옙 占쎈ご占쎈뻻�뀏�뀒�뀓�뀕�뀓�뀒���뀓�꽩�뀒�꽴
     @GetMapping("/communityPost")
     public String showCommunityPost() {
         return "board/communityPost"; // communityPost.jsp
     }
 
-    // 寃뚯떆湲� 蹂닿린 �럹�씠吏� �몴�ㅇㄴㄹㄴㅇㄹㅇ떆
+    // 野껊슣�뻻疫뀐옙 癰귣떯由� 占쎈읂占쎌뵠筌욑옙 占쎈ご占썬뀋�꽩�꽮�꽩�뀋�꽮�뀋�뻻
     @GetMapping("/communityView")
     public String showCommunityView(@RequestParam("postId") int postId, Model model, HttpSession session) {
-        // 寃뚯떆湲� 議고쉶 (吏곷Т 移댄뀒怨좊━ �룷�븿)
+        // 野껊슣�뻻疫뀐옙 鈺곌퀬�돳 (筌욊낮龜 燁삳똾�믤�⑥쥓�봺 占쎈７占쎈맙)
         Board post = boardService.getPostWithJobCategories(postId);
-        if(post != null && "Y".equals(post.getStatus())) { // getStatus() 硫붿꽌�뱶 議댁옱 �솗�씤
-            // 議고쉶�닔 利앷�
+        if(post != null && "Y".equals(post.getStatus())) { // getStatus() 筌롫뗄苑뚳옙諭� 鈺곕똻�삺 占쎌넇占쎌뵥
+            // 鈺곌퀬�돳占쎈땾 筌앹빓占�
             boardService.increaseViewCount(postId);
 
-            // 紐⑤뜽�뿉 寃뚯떆湲� 異붽�
+            // 筌뤴뫀�쑞占쎈퓠 野껊슣�뻻疫뀐옙 �빊遺쏙옙
             model.addAttribute("post", post);
 
-            // �쁽�옱 �궗�슜�옄 �젙蹂� (濡쒓렇�씤 �궗�슜�옄 �젙蹂�)
+            // 占쎌겱占쎌삺 占쎄텢占쎌뒠占쎌쁽 占쎌젟癰귨옙 (嚥≪뮄�젃占쎌뵥 占쎄텢占쎌뒠占쎌쁽 占쎌젟癰귨옙)
             Member currentUser = (Member) session.getAttribute("loginUser");
             if(currentUser != null) {
                 model.addAttribute("currentUser", currentUser);
 
-                // �궗�슜�옄媛� �씠 寃뚯떆湲��뿉 怨듦컧�뻽�뒗吏� �뿬遺� �뙋�떒 濡쒖쭅 異붽� 媛��뒫
-                boolean userLikedPost = false; // �떎�젣 怨듦컧 �뿬遺� �뙋�떒 濡쒖쭅 援ы쁽 �븘�슂
+                // 占쎄텢占쎌뒠占쎌쁽揶쏉옙 占쎌뵠 野껊슣�뻻疫뀐옙占쎈퓠 �⑤벀而㏆옙六쏙옙�뮉筌욑옙 占쎈연�겫占� 占쎈솇占쎈뼊 嚥≪뮇彛� �빊遺쏙옙 揶쏉옙占쎈뮟
+                boolean userLikedPost = false; // 占쎈뼄占쎌젫 �⑤벀而� 占쎈연�겫占� 占쎈솇占쎈뼊 嚥≪뮇彛� �뤃�뗭겱 占쎈툡占쎌뒄
                 model.addAttribute("userLikedPost", userLikedPost);
             } else {
                 model.addAttribute("userLikedPost", false);
@@ -71,71 +71,71 @@ public class BoardController {
 
             return "board/communityView"; // communityView.jsp
         } else {
-            model.addAttribute("errorMsg", "寃뚯떆湲��쓣 李얠쓣 �닔 �뾾�뒿�땲�떎.");
-            return "common/errorPage"; // �뿉�윭 �럹�씠吏�
+            model.addAttribute("errorMsg", "野껊슣�뻻疫뀐옙占쎌뱽 筌≪뼚�뱽 占쎈땾 占쎈씨占쎈뮸占쎈빍占쎈뼄.");
+            return "common/errorPage"; // 占쎈퓠占쎌쑎 占쎈읂占쎌뵠筌욑옙
         }
     }
     
-    // 寃뚯떆湲� �닔�젙 �럹�씠吏� �몴�떆
+    // 野껊슣�뻻疫뀐옙 占쎈땾占쎌젟 占쎈읂占쎌뵠筌욑옙 占쎈ご占쎈뻻
     @GetMapping("/editPost")
     public String showEditPost(@RequestParam("postId") int postId, Model model, HttpSession session) {
-        // 寃뚯떆湲� 議고쉶
+        // 野껊슣�뻻疫뀐옙 鈺곌퀬�돳
         Board post = boardService.getPostWithJobCategories(postId);
         if(post != null && "Y".equals(post.getStatus())) {
-            // �쁽�옱 �궗�슜�옄 �젙蹂ㅌㅊㅌㅋㅊ�
+            // 占쎌겱占쎌삺 占쎄텢占쎌뒠占쎌쁽 占쎌젟癰귙뀒�뀏�뀒�뀑�뀏占�
             Member currentUser = (Member) session.getAttribute("loginUser");
             if(currentUser != null && post.getUserNo() == currentUser.getUserNo()) {
                 model.addAttribute("post", post);
                 return "board/editPost"; // editPost.jsp
             } else {
-                model.addAttribute("errorMsg", "寃뚯떆湲��쓣 �닔�젙�븷 沅뚰븳�씠 �뾾�뒿�땲�떎.");
+                model.addAttribute("errorMsg", "野껊슣�뻻疫뀐옙占쎌뱽 占쎈땾占쎌젟占쎈막 亦낅슦釉놂옙�뵠 占쎈씨占쎈뮸占쎈빍占쎈뼄.");
                 return "common/errorPage";
             }
         } else {
-            model.addAttribute("errorMsg", "寃뚯떆湲��쓣 李얠쓣 �닔 �뾾�뒿�땲�떎.");
-            return "common/errorPage"; // �뿉�윭 �럹�씠吏�
+            model.addAttribute("errorMsg", "野껊슣�뻻疫뀐옙占쎌뱽 筌≪뼚�뱽 占쎈땾 占쎈씨占쎈뮸占쎈빍占쎈뼄.");
+            return "common/errorPage"; // 占쎈퓠占쎌쑎 占쎈읂占쎌뵠筌욑옙
         }
     }
 
-    // 而ㅻ�ㅻ땲�떚 寃뚯떆�뙋 紐⑸줉 �럹�씠吏� �몴�떆
+    // �뚣끇占썬끇�빍占쎈뼒 野껊슣�뻻占쎈솇 筌뤴뫖以� 占쎈읂占쎌뵠筌욑옙 占쎈ご占쎈뻻
     @GetMapping("/communityList")
-    public String showCommunityList(@RequestParam(value="category", defaultValue="�쟾泥닿�") String category, Model model) {
+    public String showCommunityList(@RequestParam(value="category", defaultValue="占쎌읈筌ｋ떯占�") String category, Model model) {
         model.addAttribute("category", category);
         return "board/communityList"; // communityList.jsp
     }
 
-    // �엫�떆 濡쒓렇�씤 �뿏�뱶�룷�씤�듃 (媛쒕컻�슜)
+    // 占쎌뿫占쎈뻻 嚥≪뮄�젃占쎌뵥 占쎈퓦占쎈굡占쎈７占쎌뵥占쎈뱜 (揶쏆뮆而삼옙�뒠)
     @GetMapping("/testLogin")
     public String testLogin(HttpSession session) {
         Member mockUser = new Member();
-        mockUser.setUserNo(1); // �떎�젣 �궗�슜�옄 踰덊샇濡� 蹂�寃�
-        mockUser.setUserId("testuser123"); // userId �꽕�젙
-        // �븘�슂�븳 �떎瑜� �븘�뱶�룄 �꽕�젙
+        mockUser.setUserNo(1); // 占쎈뼄占쎌젫 占쎄텢占쎌뒠占쎌쁽 甕곕뜇�깈嚥∽옙 癰귨옙野껓옙
+        mockUser.setUserId("testuser123"); // userId 占쎄퐬占쎌젟
+        // 占쎈툡占쎌뒄占쎈립 占쎈뼄�몴占� 占쎈툡占쎈굡占쎈즲 占쎄퐬占쎌젟
         session.setAttribute("loginUser", mockUser);
-        return "redirect:/resume/enrollresume"; // 濡쒓렇�씤 �썑 由щ떎�씠�젆�듃�븷 �럹�씠吏�
+        return "redirect:/resume/enrollresume"; // 嚥≪뮄�젃占쎌뵥 占쎌뜎 �뵳�됰뼄占쎌뵠占쎌젂占쎈뱜占쎈막 占쎈읂占쎌뵠筌욑옙
     }
     
-    // 梨꾩슜怨듦퀬紐⑸줉 留듯븨
+    // 筌�袁⑹뒠�⑤벀�э쭗�뫖以� 筌띾벏釉�
     @GetMapping("/listOfJobOpening")
     public String showJobOpeningList() {
         return "board/listOfJobOpening"; // listOfJobOpening.jsp
     }
     
     // -------------------
-    // REST API 愿��젴 硫붿꽌�뱶
+    // REST API �꽴占쏙옙�졃 筌롫뗄苑뚳옙諭�
     // -------------------
 
-    // 寃뚯떆湲� �닔 議고쉶 (REST API)
+    // 野껊슣�뻻疫뀐옙 占쎈땾 鈺곌퀬�돳 (REST API)
     @GetMapping("/api/postCount")
     @ResponseBody
     public Map<String, Object> getPostCount() {
-        int count = boardService.countPosts("�쟾泥닿�");
+        int count = boardService.countPosts("占쎌읈筌ｋ떯占�");
         Map<String, Object> response = new HashMap<>();
         response.put("count", count);
         return response;
     }
 
-    // �씤湲� 寃뚯떆湲� 議고쉶 (REST API)
+    // 占쎌뵥疫뀐옙 野껊슣�뻻疫뀐옙 鈺곌퀬�돳 (REST API)
     @GetMapping("/api/popularPosts")
     @ResponseBody
     public Map<String, Object> getPopularPosts() {
@@ -145,12 +145,12 @@ public class BoardController {
         return response;
     }
 
-    // 移댄뀒怨좊━ 諛� �븘�꽣�뿉 �뵲瑜� 寃뚯떆湲� 議고쉶 (REST API)
+    // 燁삳똾�믤�⑥쥓�봺 獄쏉옙 占쎈툡占쎄숲占쎈퓠 占쎈뎡�몴占� 野껊슣�뻻疫뀐옙 鈺곌퀬�돳 (REST API)
     @GetMapping("/api/posts")
     @ResponseBody
     public Map<String, Object> getPosts(
-            @RequestParam(value="category", defaultValue="�쟾泥닿�") String category,
-            @RequestParam(value="filter", defaultValue="理쒖떊�닚") String filter,
+            @RequestParam(value="category", defaultValue="占쎌읈筌ｋ떯占�") String category,
+            @RequestParam(value="filter", defaultValue="筌ㅼ뮇�뻿占쎈떄") String filter,
             @RequestParam(value="jobFilter", required=false) String jobFilter,
             @RequestParam(value="offset", defaultValue="0") int offset,
             @RequestParam(value="limit", defaultValue="10") int limit) {
@@ -164,7 +164,7 @@ public class BoardController {
         return response;
     }
 
-    // �깉濡쒖슫 寃뚯떆湲� �깮�꽦 (REST API)
+    // 占쎄퉱嚥≪뮇�뒲 野껊슣�뻻疫뀐옙 占쎄문占쎄쉐 (REST API)
     @PostMapping("/api/posts")
     @ResponseBody
     public Map<String, Object> createPost(
@@ -178,36 +178,36 @@ public class BoardController {
         
         Map<String, Object> response = new HashMap<>();
         try {
-            // �쁽�옱 濡쒓렇�씤�븳 �궗�슜�옄 �젙蹂� 媛��졇�삤湲�
+            // 占쎌겱占쎌삺 嚥≪뮄�젃占쎌뵥占쎈립 占쎄텢占쎌뒠占쎌쁽 占쎌젟癰귨옙 揶쏉옙占쎌죬占쎌궎疫뀐옙
             Member currentUser = (Member) session.getAttribute("loginUser");
             if(currentUser == null) {
                 response.put("status", "fail");
-                response.put("message", "濡쒓렇�씤�씠 �븘�슂�빀�땲�떎.");
+                response.put("message", "嚥≪뮄�젃占쎌뵥占쎌뵠 占쎈툡占쎌뒄占쎈�占쎈빍占쎈뼄.");
                 return response;
             }
             int userNo = currentUser.getUserNo();
-            String author = currentUser.getUserId(); // �븘�슂�뿉 �뵲�씪 蹂�寃�
+            String author = currentUser.getUserId(); // 占쎈툡占쎌뒄占쎈퓠 占쎈뎡占쎌뵬 癰귨옙野껓옙
 
-            // �씠誘몄� �뾽濡쒕뱶 泥섎━
+            // 占쎌뵠沃섎챷占� 占쎈씜嚥≪뮆諭� 筌ｌ꼶�봺
             String imagePath = null;
             if(image != null && !image.isEmpty()) {
-                // 怨좎젙�맂 �뾽濡쒕뱶 �뵒�젆�넗由� �꽕�젙
+                // �⑥쥙�젟占쎈쭆 占쎈씜嚥≪뮆諭� 占쎈탵占쎌젂占쎈꽅�뵳占� 占쎄퐬占쎌젟
                 String uploadDir = "C:/uploads/";
                 File dir = new File(uploadDir);
                 if (!dir.exists()) {
-                    dir.mkdirs(); // �뵒�젆�넗由� �깮�꽦
+                    dir.mkdirs(); // 占쎈탵占쎌젂占쎈꽅�뵳占� 占쎄문占쎄쉐
                 }
                 String originalFilename = image.getOriginalFilename();
                 String uniqueFilename = System.currentTimeMillis() + "_" + originalFilename;
                 File dest = new File(dir, uniqueFilename);
                 image.transferTo(dest);
-                imagePath = uniqueFilename; // �씠誘몄� �뙆�씪紐낅쭔 ���옣
+                imagePath = uniqueFilename; // 占쎌뵠沃섎챷占� 占쎈솁占쎌뵬筌뤿굝彛� 占쏙옙占쎌삢
 
-                // �뾽濡쒕뱶 寃쎈줈 濡쒓렇 異쒕젰
+                // 占쎈씜嚥≪뮆諭� 野껋럥以� 嚥≪뮄�젃 �빊�뮆�젾
                 System.out.println("Image uploaded to: " + dest.getAbsolutePath());
             }
 
-            // Board 媛앹껜 �깮�꽦
+            // Board 揶쏆빘猿� 占쎄문占쎄쉐
             Board board = new Board();
             board.setCategory(category);
             board.setTitle(title);
@@ -220,77 +220,77 @@ public class BoardController {
             board.setLikeCount(0);
             board.setHashtags(hashtags);
             board.setJobCategories(jobs);
-            board.setStatus("Y"); // 寃뚯떆湲� �긽�깭 �꽕�젙
+            board.setStatus("Y"); // 野껊슣�뻻疫뀐옙 占쎄맒占쎄묶 占쎄퐬占쎌젟
 
-            // 寃뚯떆湲� �궫�엯
+            // 野껊슣�뻻疫뀐옙 占쎄땜占쎌뿯
             int result = boardService.createPost(board);
             if(result > 0) {
                 response.put("status", "success");
                 response.put("postId", board.getPostingNo());
             } else {
                 response.put("status", "fail");
-                response.put("message", "寃뚯떆湲� �벑濡앹뿉 �떎�뙣�뻽�뒿�땲�떎.");
+                response.put("message", "野껊슣�뻻疫뀐옙 占쎈쾻嚥≪빘肉� 占쎈뼄占쎈솭占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
             }
         } catch(IOException e) {
             e.printStackTrace();
             response.put("status", "error");
-            response.put("message", "�씠誘몄� �뾽濡쒕뱶 以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎: " + e.getMessage());
+            response.put("message", "占쎌뵠沃섎챷占� 占쎈씜嚥≪뮆諭� 餓ο옙 占쎌궎�몴�꼵占� 獄쏆뮇源�占쎈뻥占쎈뮸占쎈빍占쎈뼄: " + e.getMessage());
         } catch(Exception e) {
             e.printStackTrace();
             response.put("status", "error");
-            response.put("message", "�꽌踰� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎: " + e.getMessage());
+            response.put("message", "占쎄퐣甕곤옙 占쎌궎�몴�꼵占� 獄쏆뮇源�占쎈뻥占쎈뮸占쎈빍占쎈뼄: " + e.getMessage());
         }
 
         return response;
     }
 
-    // 寃뚯떆湲� �궘�젣 API (REST API)
+    // 野껊슣�뻻疫뀐옙 占쎄텣占쎌젫 API (REST API)
     @DeleteMapping("/api/posts/{postingNo}")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> deletePost(
             @PathVariable("postingNo") int postingNo,
-            HttpSession session) { // �꽭�뀡�쓣 �넻�빐 �궗�슜�옄 �젙蹂� 媛��졇�삤湲�
+            HttpSession session) { // 占쎄쉭占쎈�∽옙�뱽 占쎈꽰占쎈퉸 占쎄텢占쎌뒠占쎌쁽 占쎌젟癰귨옙 揶쏉옙占쎌죬占쎌궎疫뀐옙
 
         Map<String, Object> response = new HashMap<>();
 
-        // �쁽�옱 �궗�슜�옄 �젙蹂� 媛��졇�삤湲� (�꽭�뀡�쓣 �넻�빐)
+        // 占쎌겱占쎌삺 占쎄텢占쎌뒠占쎌쁽 占쎌젟癰귨옙 揶쏉옙占쎌죬占쎌궎疫뀐옙 (占쎄쉭占쎈�∽옙�뱽 占쎈꽰占쎈퉸)
         Member currentUser = (Member) session.getAttribute("loginUser");
         if(currentUser == null) {
             response.put("status", "fail");
-            response.put("message", "濡쒓렇�씤�씠 �븘�슂�빀�땲�떎.");
+            response.put("message", "嚥≪뮄�젃占쎌뵥占쎌뵠 占쎈툡占쎌뒄占쎈�占쎈빍占쎈뼄.");
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
         int currentUserNo = currentUser.getUserNo();
 
-        // 寃뚯떆湲� �젙蹂� 議고쉶
+        // 野껊슣�뻻疫뀐옙 占쎌젟癰귨옙 鈺곌퀬�돳
         Board post = boardService.getPost(postingNo);
         if (post == null || !"Y".equals(post.getStatus())) {
             response.put("status", "fail");
-            response.put("message", "寃뚯떆湲��쓣 李얠쓣 �닔 �뾾�뒿�땲�떎.");
+            response.put("message", "野껊슣�뻻疫뀐옙占쎌뱽 筌≪뼚�뱽 占쎈땾 占쎈씨占쎈뮸占쎈빍占쎈뼄.");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        // �옉�꽦�옄 �솗�씤
+        // 占쎌삂占쎄쉐占쎌쁽 占쎌넇占쎌뵥
         if (post.getUserNo() != currentUserNo) {
             response.put("status", "fail");
-            response.put("message", "蹂몄씤�쓽 寃뚯떆湲�留� �궘�젣�븷 �닔 �엳�뒿�땲�떎.");
+            response.put("message", "癰귣챷�뵥占쎌벥 野껊슣�뻻疫뀐옙筌랃옙 占쎄텣占쎌젫占쎈막 占쎈땾 占쎌뿳占쎈뮸占쎈빍占쎈뼄.");
             return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
         }
 
-        // 寃뚯떆湲� �궘�젣
+        // 野껊슣�뻻疫뀐옙 占쎄텣占쎌젫
         int result = boardService.deletePost(postingNo);
         if (result > 0) {
             response.put("status", "success");
-            response.put("message", "寃뚯떆湲��씠 �궘�젣�릺�뿀�뒿�땲�떎.");
+            response.put("message", "野껊슣�뻻疫뀐옙占쎌뵠 占쎄텣占쎌젫占쎈┷占쎈�占쎈뮸占쎈빍占쎈뼄.");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             response.put("status", "fail");
-            response.put("message", "寃뚯떆湲� �궘�젣�뿉 �떎�뙣�뻽�뒿�땲�떎.");
+            response.put("message", "野껊슣�뻻疫뀐옙 占쎄텣占쎌젫占쎈퓠 占쎈뼄占쎈솭占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // 寃뚯떆湲� 議고쉶 API (REST API)
+    // 野껊슣�뻻疫뀐옙 鈺곌퀬�돳 API (REST API)
     @GetMapping("/api/posts/{postingNo}")
     @ResponseBody
     public ResponseEntity<Board> getPost(@PathVariable("postingNo") int postingNo) {
@@ -298,12 +298,12 @@ public class BoardController {
         if (post == null || !"Y".equals(post.getStatus())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        // 議고쉶�닔 利앷�
+        // 鈺곌퀬�돳占쎈땾 筌앹빓占�
         boardService.increaseViewCount(postingNo);
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
-    // 寃뚯떆湲� �닔�젙 API (REST API)
+    // 野껊슣�뻻疫뀐옙 占쎈땾占쎌젟 API (REST API)
     @PostMapping("/api/posts/{postingNo}/update")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> updatePost(
@@ -319,46 +319,46 @@ public class BoardController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            // �쁽�옱 �궗�슜�옄 �젙蹂� 媛��졇�삤湲� (濡쒓렇�씤 �궗�슜�옄 �젙蹂�)
+            // 占쎌겱占쎌삺 占쎄텢占쎌뒠占쎌쁽 占쎌젟癰귨옙 揶쏉옙占쎌죬占쎌궎疫뀐옙 (嚥≪뮄�젃占쎌뵥 占쎄텢占쎌뒠占쎌쁽 占쎌젟癰귨옙)
             Member currentUser = (Member) session.getAttribute("loginUser");
             if(currentUser == null) {
                 response.put("status", "fail");
-                response.put("message", "濡쒓렇�씤�씠 �븘�슂�빀�땲�떎.");
+                response.put("message", "嚥≪뮄�젃占쎌뵥占쎌뵠 占쎈툡占쎌뒄占쎈�占쎈빍占쎈뼄.");
                 return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
             }
             int userNo = currentUser.getUserNo();
 
-            // 寃뚯떆湲� �젙蹂� 議고쉶
+            // 野껊슣�뻻疫뀐옙 占쎌젟癰귨옙 鈺곌퀬�돳
             Board existingPost = boardService.getPostWithJobCategories(postingNo);
             if(existingPost == null || !"Y".equals(existingPost.getStatus())) {
                 response.put("status", "fail");
-                response.put("message", "寃뚯떆湲��쓣 李얠쓣 �닔 �뾾�뒿�땲�떎.");
+                response.put("message", "野껊슣�뻻疫뀐옙占쎌뱽 筌≪뼚�뱽 占쎈땾 占쎈씨占쎈뮸占쎈빍占쎈뼄.");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
 
-            // �옉�꽦�옄 �솗�씤
+            // 占쎌삂占쎄쉐占쎌쁽 占쎌넇占쎌뵥
             if(existingPost.getUserNo() != userNo) {
                 response.put("status", "fail");
-                response.put("message", "蹂몄씤�쓽 寃뚯떆湲�留� �닔�젙�븷 �닔 �엳�뒿�땲�떎.");
+                response.put("message", "癰귣챷�뵥占쎌벥 野껊슣�뻻疫뀐옙筌랃옙 占쎈땾占쎌젟占쎈막 占쎈땾 占쎌뿳占쎈뮸占쎈빍占쎈뼄.");
                 return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
             }
 
-            // �씠誘몄� �뾽濡쒕뱶 泥섎━ (湲곗〈 �씠誘몄� �쑀吏� �삉�뒗 �깉濡쒖슫 �씠誘몄�濡� ��泥�)
-            String imagePath = existingPost.getImagePath(); // 湲곗〈 �씠誘몄� 寃쎈줈 �쑀吏�
+            // 占쎌뵠沃섎챷占� 占쎈씜嚥≪뮆諭� 筌ｌ꼶�봺 (疫꿸퀣�� 占쎌뵠沃섎챷占� 占쎌�筌욑옙 占쎌굢占쎈뮉 占쎄퉱嚥≪뮇�뒲 占쎌뵠沃섎챷占썸에占� 占쏙옙筌ｏ옙)
+            String imagePath = existingPost.getImagePath(); // 疫꿸퀣�� 占쎌뵠沃섎챷占� 野껋럥以� 占쎌�筌욑옙
             if(image != null && !image.isEmpty()) {
-                // 怨좎젙�맂 �뾽濡쒕뱶 �뵒�젆�넗由� �꽕�젙
+                // �⑥쥙�젟占쎈쭆 占쎈씜嚥≪뮆諭� 占쎈탵占쎌젂占쎈꽅�뵳占� 占쎄퐬占쎌젟
                 String uploadDir = "C:/uploads/";
                 File dir = new File(uploadDir);
                 if (!dir.exists()) {
-                    dir.mkdirs(); // �뵒�젆�넗由� �깮�꽦
+                    dir.mkdirs(); // 占쎈탵占쎌젂占쎈꽅�뵳占� 占쎄문占쎄쉐
                 }
                 String originalFilename = image.getOriginalFilename();
                 String uniqueFilename = System.currentTimeMillis() + "_" + originalFilename;
                 File dest = new File(dir, uniqueFilename);
                 image.transferTo(dest);
-                imagePath = uniqueFilename; // �씠誘몄� �뙆�씪紐낅쭔 ���옣
+                imagePath = uniqueFilename; // 占쎌뵠沃섎챷占� 占쎈솁占쎌뵬筌뤿굝彛� 占쏙옙占쎌삢
 
-                // 湲곗〈 �씠誘몄� �뙆�씪 �궘�젣 (�꽑�깮 �궗�빆)
+                // 疫꿸퀣�� 占쎌뵠沃섎챷占� 占쎈솁占쎌뵬 占쎄텣占쎌젫 (占쎄퐨占쎄문 占쎄텢占쎈퉮)
                 if(existingPost.getImagePath() != null) {
                     File oldImage = new File("C:/uploads/" + existingPost.getImagePath());
                     if(oldImage.exists()) {
@@ -367,11 +367,11 @@ public class BoardController {
                     }
                 }
 
-                // �뾽濡쒕뱶 寃쎈줈 濡쒓렇 異쒕젰
+                // 占쎈씜嚥≪뮆諭� 野껋럥以� 嚥≪뮄�젃 �빊�뮆�젾
                 System.out.println("Image updated to: " + dest.getAbsolutePath());
             }
 
-            // Board 媛앹껜 �깮�꽦 諛� �뾽�뜲�씠�듃�븷 �븘�뱶 �꽕�젙
+            // Board 揶쏆빘猿� 占쎄문占쎄쉐 獄쏉옙 占쎈씜占쎈쑓占쎌뵠占쎈뱜占쎈막 占쎈툡占쎈굡 占쎄퐬占쎌젟
             Board board = new Board();
             board.setPostingNo(postingNo);
             board.setCategory(category);
@@ -381,29 +381,29 @@ public class BoardController {
             board.setUserNo(userNo);
             board.setJobCategories(jobs);
             board.setHashtags(hashtags);
-            board.setStatus("Y"); // �긽�깭 �쑀吏�
+            board.setStatus("Y"); // 占쎄맒占쎄묶 占쎌�筌욑옙
 
-            // 寃뚯떆湲� �뾽�뜲�씠�듃
+            // 野껊슣�뻻疫뀐옙 占쎈씜占쎈쑓占쎌뵠占쎈뱜
             int result = boardService.updatePost(board);
             if(result > 0) {
                 response.put("status", "success");
-                response.put("message", "寃뚯떆湲��씠 �닔�젙�릺�뿀�뒿�땲�떎.");
+                response.put("message", "野껊슣�뻻疫뀐옙占쎌뵠 占쎈땾占쎌젟占쎈┷占쎈�占쎈뮸占쎈빍占쎈뼄.");
                 response.put("postId", postingNo);
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
                 response.put("status", "fail");
-                response.put("message", "寃뚯떆湲� �닔�젙�뿉 �떎�뙣�뻽�뒿�땲�떎.");
+                response.put("message", "野껊슣�뻻疫뀐옙 占쎈땾占쎌젟占쎈퓠 占쎈뼄占쎈솭占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(IOException e) {
             e.printStackTrace();
             response.put("status", "error");
-            response.put("message", "�씠誘몄� �뾽濡쒕뱶 以� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎: " + e.getMessage());
+            response.put("message", "占쎌뵠沃섎챷占� 占쎈씜嚥≪뮆諭� 餓ο옙 占쎌궎�몴�꼵占� 獄쏆뮇源�占쎈뻥占쎈뮸占쎈빍占쎈뼄: " + e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch(Exception e) {
             e.printStackTrace();
             response.put("status", "error");
-            response.put("message", "�꽌踰� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎: " + e.getMessage());
+            response.put("message", "占쎄퐣甕곤옙 占쎌궎�몴�꼵占� 獄쏆뮇源�占쎈뻥占쎈뮸占쎈빍占쎈뼄: " + e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -414,130 +414,130 @@ public class BoardController {
     public Map<String, Object> likePost(@PathVariable("postingNo") int postingNo, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         try {
-            // 濡쒓렇�씤 �뿬遺� �솗�씤
+            // 嚥≪뮄�젃占쎌뵥 占쎈연�겫占� 占쎌넇占쎌뵥
             Member currentUser = (Member) session.getAttribute("loginUser");
             if(currentUser == null) {
                 response.put("status", "fail");
-                response.put("message", "濡쒓렇�씤�씠 �븘�슂�빀�땲�떎.");
+                response.put("message", "嚥≪뮄�젃占쎌뵥占쎌뵠 占쎈툡占쎌뒄占쎈�占쎈빍占쎈뼄.");
                 return response;
             }
 
-            // 怨듦컧 濡쒖쭅
+            // �⑤벀而� 嚥≪뮇彛�
             boolean success = boardService.likePost(postingNo, currentUser.getUserNo());
 
             if(success) {
                 response.put("status", "success");
-                response.put("message", "怨듦컧�뻽�뒿�땲�떎.");
+                response.put("message", "�⑤벀而㏆옙六쏙옙�뮸占쎈빍占쎈뼄.");
             } else {
                 response.put("status", "fail");
-                response.put("message", "�씠誘� 怨듦컧�뻽嫄곕굹, 怨듦컧�뿉 �떎�뙣�뻽�뒿�땲�떎.");
+                response.put("message", "占쎌뵠沃섓옙 �⑤벀而㏆옙六썲쳞怨뺢돌, �⑤벀而㏆옙肉� 占쎈뼄占쎈솭占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
             }
         } catch(Exception e) {
             e.printStackTrace();
             response.put("status", "error");
-            response.put("message", "�꽌踰� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎.");
+            response.put("message", "占쎄퐣甕곤옙 占쎌궎�몴�꼵占� 獄쏆뮇源�占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
         }
         return response;
     }
 
-    /* 寃뚯떆湲� 怨듦컧 痍⑥냼 API */
+    /* 野껊슣�뻻疫뀐옙 �⑤벀而� �뿆�뫁�꺖 API */
     @PostMapping("/api/posts/{postingNo}/unlike")
     @ResponseBody
     public Map<String, Object> unlikePost(@PathVariable("postingNo") int postingNo, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         try {
-            // 濡쒓렇�씤 �뿬遺� �솗�씤
+            // 嚥≪뮄�젃占쎌뵥 占쎈연�겫占� 占쎌넇占쎌뵥
             Member currentUser = (Member) session.getAttribute("loginUser");
             if(currentUser == null) {
                 response.put("status", "fail");
-                response.put("message", "濡쒓렇�씤�씠 �븘�슂�빀�땲�떎.");
+                response.put("message", "嚥≪뮄�젃占쎌뵥占쎌뵠 占쎈툡占쎌뒄占쎈�占쎈빍占쎈뼄.");
                 return response;
             }
 
-            // 怨듦컧 痍⑥냼 濡쒖쭅
+            // �⑤벀而� �뿆�뫁�꺖 嚥≪뮇彛�
             boolean success = boardService.unlikePost(postingNo, currentUser.getUserNo());
 
             if(success) {
                 response.put("status", "success");
-                response.put("message", "怨듦컧�쓣 痍⑥냼�뻽�뒿�땲�떎.");
+                response.put("message", "�⑤벀而㏆옙�뱽 �뿆�뫁�꺖占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
             } else {
                 response.put("status", "fail");
-                response.put("message", "怨듦컧�쓣 �븯吏� �븡�븯嫄곕굹, 痍⑥냼�뿉 �떎�뙣�뻽�뒿�땲�떎.");
+                response.put("message", "�⑤벀而㏆옙�뱽 占쎈릭筌욑옙 占쎈륫占쎈릭椰꾧퀡援�, �뿆�뫁�꺖占쎈퓠 占쎈뼄占쎈솭占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
             }
         } catch(Exception e) {
             e.printStackTrace();
             response.put("status", "error");
-            response.put("message", "�꽌踰� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎.");
+            response.put("message", "占쎄퐣甕곤옙 占쎌궎�몴�꼵占� 獄쏆뮇源�占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
         }
         return response;
     }
 
-    /* �뙎湲� 怨듦컧 API */
+    /* 占쎈솊疫뀐옙 �⑤벀而� API */
     @PostMapping("/api/replies/{replyNo}/like")
     @ResponseBody
     public Map<String, Object> likeReply(@PathVariable("replyNo") int replyNo, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         try {
-            // 濡쒓렇�씤 �뿬遺� �솗�씤
+            // 嚥≪뮄�젃占쎌뵥 占쎈연�겫占� 占쎌넇占쎌뵥
             Member currentUser = (Member) session.getAttribute("loginUser");
             if(currentUser == null) {
                 response.put("status", "fail");
-                response.put("message", "濡쒓렇�씤�씠 �븘�슂�빀�땲�떎.");
+                response.put("message", "嚥≪뮄�젃占쎌뵥占쎌뵠 占쎈툡占쎌뒄占쎈�占쎈빍占쎈뼄.");
                 return response;
             }
 
-            // 怨듦컧 濡쒖쭅
+            // �⑤벀而� 嚥≪뮇彛�
             boolean success = boardService.likeReply(replyNo, currentUser.getUserNo());
 
             if(success) {
                 response.put("status", "success");
-                response.put("message", "怨듦컧�뻽�뒿�땲�떎.");
+                response.put("message", "�⑤벀而㏆옙六쏙옙�뮸占쎈빍占쎈뼄.");
             } else {
                 response.put("status", "fail");
-                response.put("message", "�씠誘� 怨듦컧�뻽嫄곕굹, 怨듦컧�뿉 �떎�뙣�뻽�뒿�땲�떎.");
+                response.put("message", "占쎌뵠沃섓옙 �⑤벀而㏆옙六썲쳞怨뺢돌, �⑤벀而㏆옙肉� 占쎈뼄占쎈솭占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
             }
         } catch(Exception e) {
             e.printStackTrace();
             response.put("status", "error");
-            response.put("message", "�꽌踰� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎.");
+            response.put("message", "占쎄퐣甕곤옙 占쎌궎�몴�꼵占� 獄쏆뮇源�占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
         }
         return response;
     }
 
-    /* �뙎湲� 怨듦컧 痍⑥냼 API */
+    /* 占쎈솊疫뀐옙 �⑤벀而� �뿆�뫁�꺖 API */
     @PostMapping("/api/replies/{replyNo}/unlike")
     @ResponseBody
     public Map<String, Object> unlikeReply(@PathVariable("replyNo") int replyNo, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         try {
-            // 濡쒓렇�씤 �뿬遺� �솗�씤
+            // 嚥≪뮄�젃占쎌뵥 占쎈연�겫占� 占쎌넇占쎌뵥
             Member currentUser = (Member) session.getAttribute("loginUser");
             if(currentUser == null) {
                 response.put("status", "fail");
-                response.put("message", "濡쒓렇�씤�씠 �븘�슂�빀�땲�떎.");
+                response.put("message", "嚥≪뮄�젃占쎌뵥占쎌뵠 占쎈툡占쎌뒄占쎈�占쎈빍占쎈뼄.");
                 return response;
             }
 
-            // 怨듦컧 痍⑥냼 濡쒖쭅
+            // �⑤벀而� �뿆�뫁�꺖 嚥≪뮇彛�
             boolean success = boardService.unlikeReply(replyNo, currentUser.getUserNo());
 
             if(success) {
                 response.put("status", "success");
-                response.put("message", "怨듦컧�쓣 痍⑥냼�뻽�뒿�땲�떎.");
+                response.put("message", "�⑤벀而㏆옙�뱽 �뿆�뫁�꺖占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
             } else {
                 response.put("status", "fail");
-                response.put("message", "怨듦컧�쓣 �븯吏� �븡�븯嫄곕굹, 痍⑥냼�뿉 �떎�뙣�뻽�뒿�땲�떎.");
+                response.put("message", "�⑤벀而㏆옙�뱽 占쎈릭筌욑옙 占쎈륫占쎈릭椰꾧퀡援�, �뿆�뫁�꺖占쎈퓠 占쎈뼄占쎈솭占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
             }
         } catch(Exception e) {
             e.printStackTrace();
             response.put("status", "error");
-            response.put("message", "�꽌踰� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎.");
+            response.put("message", "占쎄퐣甕곤옙 占쎌궎�몴�꼵占� 獄쏆뮇源�占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
         }
         return response;
     }
 
     
-    // �듅�젙 寃뚯떆湲��쓽 �뙎湲� 議고쉶 (REST API)
+    // 占쎈뱟占쎌젟 野껊슣�뻻疫뀐옙占쎌벥 占쎈솊疫뀐옙 鈺곌퀬�돳 (REST API)
     @GetMapping("/api/replies")
     @ResponseBody
     public Map<String, Object> getReplies(@RequestParam("postId") int postId) {
@@ -547,58 +547,58 @@ public class BoardController {
         return response;
     }
 
-    // �뙎湲� 異붽� (REST API)
+    // 占쎈솊疫뀐옙 �빊遺쏙옙 (REST API)
     @PostMapping("/api/replies")
     @ResponseBody
     public Map<String, Object> addReply(@RequestBody Reply reply, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         try {
-            // �꽭�뀡�뿉�꽌 �쁽�옱 �궗�슜�옄 �젙蹂� 媛��졇�삤湲�
+            // 占쎄쉭占쎈�∽옙肉됵옙苑� 占쎌겱占쎌삺 占쎄텢占쎌뒠占쎌쁽 占쎌젟癰귨옙 揶쏉옙占쎌죬占쎌궎疫뀐옙
             Member currentUser = (Member) session.getAttribute("loginUser");
             if(currentUser == null) {
                 response.put("status", "fail");
-                response.put("message", "濡쒓렇�씤�씠 �븘�슂�빀�땲�떎.");
+                response.put("message", "嚥≪뮄�젃占쎌뵥占쎌뵠 占쎈툡占쎌뒄占쎈�占쎈빍占쎈뼄.");
                 return response;
             }
             int userNo = currentUser.getUserNo();
             reply.setUserNo(userNo);
-            // author �븘�뱶�뒗 MyBatis selectReplies�뿉�꽌 JOIN�쓣 �넻�빐 媛��졇�삤湲� �븣臾몄뿉 �꽌踰꾩뿉�꽌 �꽕�젙�븷 �븘�슂 �뾾�쓬
+            // author 占쎈툡占쎈굡占쎈뮉 MyBatis selectReplies占쎈퓠占쎄퐣 JOIN占쎌뱽 占쎈꽰占쎈퉸 揶쏉옙占쎌죬占쎌궎疫뀐옙 占쎈르�눧紐꾨퓠 占쎄퐣甕곌쑴肉됵옙苑� 占쎄퐬占쎌젟占쎈막 占쎈툡占쎌뒄 占쎈씨占쎌벉
 
             int result = boardService.addReply(reply);
             if(result > 0) {
                 response.put("status", "success");
             } else {
                 response.put("status", "fail");
-                response.put("message", "�뙎湲� �벑濡앹뿉 �떎�뙣�뻽�뒿�땲�떎.");
+                response.put("message", "占쎈솊疫뀐옙 占쎈쾻嚥≪빘肉� 占쎈뼄占쎈솭占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
             }
             return response;
         } catch(Exception e) {
             e.printStackTrace();
             response.put("status", "error");
-            response.put("message", "�꽌踰� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎.");
+            response.put("message", "占쎄퐣甕곤옙 占쎌궎�몴�꼵占� 獄쏆뮇源�占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
             return response;
         }
     }   
     
-    // �뙎湲� �궘�젣 (REST API)
+    // 占쎈솊疫뀐옙 占쎄텣占쎌젫 (REST API)
     @DeleteMapping("/api/replies/{replyNo}")
     @ResponseBody
     public Map<String, Object> deleteReply(@PathVariable("replyNo") int replyNo, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         try {
-            // �꽭�뀡�뿉�꽌 �쁽�옱 �궗�슜�옄 �젙蹂� 媛��졇�삤湲�
+            // 占쎄쉭占쎈�∽옙肉됵옙苑� 占쎌겱占쎌삺 占쎄텢占쎌뒠占쎌쁽 占쎌젟癰귨옙 揶쏉옙占쎌죬占쎌궎疫뀐옙
             Member currentUser = (Member) session.getAttribute("loginUser");
             if(currentUser == null) {
                 response.put("status", "fail");
-                response.put("message", "濡쒓렇�씤�씠 �븘�슂�빀�땲�떎.");
+                response.put("message", "嚥≪뮄�젃占쎌뵥占쎌뵠 占쎈툡占쎌뒄占쎈�占쎈빍占쎈뼄.");
                 return response;
             }
 
-            // �뙎湲� �냼�쑀�옄 �솗�씤
+            // 占쎈솊疫뀐옙 占쎈꺖占쎌�占쎌쁽 占쎌넇占쎌뵥
             Reply existingReply = boardService.getReplyById(replyNo);
             if(existingReply == null || existingReply.getUserNo() != currentUser.getUserNo()) {
                 response.put("status", "fail");
-                response.put("message", "沅뚰븳�씠 �뾾�뒿�땲�떎.");
+                response.put("message", "亦낅슦釉놂옙�뵠 占쎈씨占쎈뮸占쎈빍占쎈뼄.");
                 return response;
             }
 
@@ -607,22 +607,22 @@ public class BoardController {
                 response.put("status", "success");
             } else {
                 response.put("status", "fail");
-                response.put("message", "�뙎湲� �궘�젣�뿉 �떎�뙣�뻽�뒿�땲�떎.");
+                response.put("message", "占쎈솊疫뀐옙 占쎄텣占쎌젫占쎈퓠 占쎈뼄占쎈솭占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
             }
         } catch(Exception e) {
             e.printStackTrace();
             response.put("status", "error");
-            response.put("message", "�꽌踰� �삤瑜섍� 諛쒖깮�뻽�뒿�땲�떎.");
+            response.put("message", "占쎄퐣甕곤옙 占쎌궎�몴�꼵占� 獄쏆뮇源�占쎈뻥占쎈뮸占쎈빍占쎈뼄.");
         }
         return response;
     }
 
-    // �씠誘몄� �꽌鍮숈쓣 �쐞�븳 而⑦듃濡ㅻ윭 硫붿꽌�뱶 異붽�
+    // 占쎌뵠沃섎챷占� 占쎄퐣�뜮�늿�뱽 占쎌맄占쎈립 �뚢뫂�뱜嚥▲끇�쑎 筌롫뗄苑뚳옙諭� �빊遺쏙옙
     @GetMapping("/uploads/{filename}")
     @ResponseBody
     public ResponseEntity<byte[]> serveImage(@PathVariable("filename") String filename) {
         try {
-            // 怨좎젙�맂 �뾽濡쒕뱶 �뵒�젆�넗由� �꽕�젙
+            // �⑥쥙�젟占쎈쭆 占쎈씜嚥≪뮆諭� 占쎈탵占쎌젂占쎈꽅�뵳占� 占쎄퐬占쎌젟
             String uploadDir = "C:/uploads/";
             File imageFile = new File(uploadDir, filename);
             if (!imageFile.exists()) {
@@ -645,8 +645,8 @@ public class BoardController {
     }
     
     /**
-     * �젣紐⑹쑝濡� 寃뚯떆湲� 寃��깋 (REST API)
-     * GET /board/api/searchPosts?title=寃��깋�뼱&offset=0&limit=10
+     * 占쎌젫筌뤴뫗�몵嚥∽옙 野껊슣�뻻疫뀐옙 野껓옙占쎄퉳 (REST API)
+     * GET /board/api/searchPosts?title=野껓옙占쎄퉳占쎈선&offset=0&limit=10
      */
     @GetMapping("/api/searchPosts")
     @ResponseBody
