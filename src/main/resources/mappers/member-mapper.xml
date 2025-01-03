@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberMapper">
+
+	<!-- Member -->
+	<resultMap type="Member" id="memberResultSet">
+		<result column="USER_NO" property="userNo" />
+		<result column="USER_TYPE" property="userType" />
+		<result column="USER_ID" property="userId" />
+		<result column="USER_PWD" property="userPwd" />
+		<result column="EMAIL" property="email" />
+		<result column="PHONE" property="phone"/>
+		<result column="ENROLL_DATE" property="enrollDate"/>
+    	<result column="MODIFY_DATE" property="modifyDate"/>
+		<result column="STATUS" property="status" />
+		<result column="BUSINESS_NO" property="businessNo" />
+		<result column="PERSON_NO" property="personNo" />
+		<result column="REGISTRATION_NUMBER" property="registrationNumber"/>
+		<result column="OWNER_NAME" property="ownerName" />
+		<result column="COMPANY_NAME" property="companyName" />
+		<result column="LOGO" property="logoImg" />
+		<result column="NAME" property="userName" />
+		<result column="BIRTHDAY" property="birthday" />
+		<result column="GENDER" property="gender" />
+	</resultMap>
+	
+	<!-- 로그인 -->
+	<select id="loginMember" parameterType="Member" resultMap="memberResultSet">
+		SELECT	USER_NO, USER_TYPE, USER_ID, USER_PWD, M.BUSINESS_NO AS BUSINESS_NO, M.PERSON_NO AS PERSON_NO,
+				<choose>
+					<when test='userType != null and userType.trim() == "B"'>
+						REGISTRATION_NUMBER, OWNER_NAME, COMPANY_NAME, LOGO
+					</when>
+					<when test='userType != null and userType.trim() == "P"'>
+						NAME, TO_CHAR(BIRTHDAY, 'YYYY.MM.DD') AS BIRTHDAY, GENDER
+					</when>
+				</choose>
+		  FROM	MEMBER M
+	 LEFT JOIN	BUSINESS B ON (M.BUSINESS_NO = B.BUSINESS_NO)
+	 LEFT JOIN	PERSON P ON (M.PERSON_NO = P.PERSON_NO)
+		 WHERE	USER_ID = #{userId}
+		   AND	USER_TYPE = #{userType, jdbcType=CHAR}
+		   AND	STATUS = 'Y'
+	</select>
+	
+	<!-- 아이디 중복 체크 -->
+	<select id="idCheck" parameterType="String" resultType="int">
+		SELECT	COUNT(*)
+		  FROM	MEMBER
+		 WHERE	USER_ID = #{checkId}
+	</select>
+	
+	<!-- 신규 회원 등록 (기업) -->
+	<insert id="insertBusiness" parameterType="Member">
+	    <selectKey resultType="int" keyProperty="businessNo" order="BEFORE">
+	        SELECT SEQ_BNO.NEXTVAL FROM DUAL
+	    </selectKey>
+	    <!-- 기업 회원 등록 -->
+	    INSERT	INTO BUSINESS (BUSINESS_NO, REGISTRATION_NUMBER)
+	    		VALUES (#{businessNo}, #{registrationNumber})
+	</insert>
+	
+	<!-- 신규 회원 등록 (개인) -->
+	<insert id="insertPerson" parameterType="Member">
+	    <selectKey resultType="int" keyProperty="personNo" order="BEFORE">
+	        SELECT SEQ_PNO.NEXTVAL FROM DUAL
+	    </selectKey>
+	    <!-- 개인 회원 등록 -->
+	    INSERT	INTO PERSON (PERSON_NO)
+	    		VALUES (#{personNo})
+	</insert>
+	
+	<!-- 신규 회원 등록 (통합) -->
+	<insert id="insertMember" parameterType="Member">
+		<selectKey resultType="int" keyProperty="userNo" order="BEFORE">
+			SELECT SEQ_UNO.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT	INTO MEMBER (
+			USER_NO,
+			USER_TYPE,
+			USER_ID,
+			USER_PWD,
+			EMAIL,
+			PHONE,
+			EROLL_DATE,
+			STATUS,
+			BUSINESS_NO,
+			PERSON_NO
+		) VALUES (
+			#{userNo},
+			#{userType, jdbcType=CHAR},
+			#{userId},
+			#{userPwd},
+			#{email},
+			#{phone},
+			SYSDATE,
+			'Y',
+			<choose>
+			    <when test='userType != null and userType.trim() == "B"'>
+			        <!-- 기업 회원의 경우 -->
+			        #{businessNo},
+			        NULL
+			    </when>
+			    <when test='userType != null and userType.trim() == "P"'>
+			        <!-- 개인 회원의 경우 -->
+			        NULL,
+			        #{personNo}
+			    </when>
+			</choose>
+		)
+	</insert>
+	
+	<!-- 회원 아이디 조회 (기업) -->
+	<select id="findMemberIdBusiness" parameterType="map" resultMap="memberResultSet">
+		SELECT	USER_NO,
+				USER_TYPE,
+				SUBSTR(USER_ID, 1, 2) || RPAD('*', LENGTH(USER_ID) - 2, '*') AS USER_ID,
+				OWNER_NAME
+		  FROM	MEMBER M
+		  JOIN	BUSINESS B ON (M.BUSINESS_NO = B.BUSINESS_NO)
+		 WHERE	USER_TYPE = 'B'
+		   AND	OWNER_NAME = #{m.userName}
+		 <choose>
+		 	<when test="method == 'email'">
+		 		AND	EMAIL = #{m.email}
+		 	</when>
+		 	<when test="method == 'phone'">
+		 		AND COMPANY_TEL = #{m.phone}
+		 	</when>
+		 	<otherwise>
+		 		AND REGISTRATION_NUMBER = #{m.registrationNumber}
+		 	</otherwise>
+		 </choose>
+	</select>
+	
+	<!-- 회원 아이디 조회 (개인) -->
+	<select id="findMemberIdPerson" parameterType="map" resultMap="memberResultSet">
+		SELECT	USER_NO,
+				USER_TYPE,
+				SUBSTR(USER_ID, 1, 2) || RPAD('*', LENGTH(USER_ID) - 2, '*') AS USER_ID,
+				NAME
+		  FROM	MEMBER M
+		  JOIN	PERSON P ON (M.PERSON_NO = P.PERSON_NO)
+		 WHERE	USER_TYPE = 'P'
+		   AND	NAME = #{m.userName}
+		 <choose>
+		 	<when test="method == 'email'">
+		 		AND	EMAIL = #{m.email}
+		 	</when>
+		 	<when test="method == 'phone'">
+		 		AND PHONE = #{m.phone}
+		 	</when>
+		 </choose>
+	</select>
+	
+	<!-- 회원 비밀번호 조회 (기업) -->
+	<select id="findMemberPwdBusiness" parameterType="map" resultMap="memberResultSet">
+		SELECT	USER_NO,
+				USER_TYPE,
+				SUBSTR(USER_ID, 1, 2) || RPAD('*', LENGTH(USER_ID) - 2, '*') AS USER_ID,
+				USER_PWD,
+				OWNER_NAME
+		  FROM	MEMBER M
+		  JOIN	BUSINESS B ON (M.BUSINESS_NO = B.BUSINESS_NO)
+		 WHERE	USER_TYPE = 'B'
+		   AND	USER_ID = ${m.userId}
+		   AND	OWNER_NAME = #{m.userName}
+		 <choose>
+		 	<when test="method == 'email'">
+		 		AND	EMAIL = #{m.email}
+		 	</when>
+		 	<when test="method == 'phone'">
+		 		AND COMPANY_TEL = #{m.phone}
+		 	</when>
+		 	<otherwise>
+		 		AND REGISTRATION_NUMBER = #{m.registrationNumber}
+		 	</otherwise>
+		 </choose>
+	</select>
+	
+	<!-- 회원 비밀번호 조회 (개인) -->
+	<select id="findMemberPwdPerson" parameterType="map" resultMap="memberResultSet">
+		SELECT	USER_NO,
+				USER_TYPE,
+				SUBSTR(USER_ID, 1, 2) || RPAD('*', LENGTH(USER_ID) - 2, '*') AS USER_ID,
+				USER_PWD,
+				NAME
+		  FROM	MEMBER M
+		  JOIN	PERSON P ON (M.PERSON_NO = P.PERSON_NO)
+		 WHERE	USER_TYPE = 'P'
+		   AND	USER_ID = #{m.userId}
+		   AND	NAME = #{m.userName}
+		 <choose>
+		 	<when test="method == 'email'">
+		 		AND	EMAIL = #{m.email}
+		 	</when>
+		 	<when test="method == 'phone'">
+		 		AND PHONE = #{m.phone}
+		 	</when>
+		 </choose>
+	</select>
+	
+	<!-- 임시 비밀번호 설정 -->
+	<update id="settingTempPwd" parameterType="map">
+		UPDATE	MEMBER
+		   SET	USER_PWD = #{tempPwd}
+		 WHERE	USER_NO = #{m.userNo}
+	</update>
+</mapper>

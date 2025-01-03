@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+  
+<configuration>
+ 
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<!-- null값 처리 -->
+ 		<setting name="jdbcTypeForNull" value="NULL"/>
+ 		
+ 		<!-- 로깅 -->
+ 		<setting name="logImpl" value="SLF4J"/>
+	</settings>
+ 	
+	<typeAliases>
+ 		<typeAlias alias="Member" type="com.cs.workdream.member.model.vo.Member"/>
+ 		<typeAlias alias="Resume" type="com.cs.workdream.resume.model.vo.Resume"/>
+ 		<typeAlias alias="Board" type="com.cs.workdream.board.model.vo.Board"/>
+ 		<typeAlias alias="Reply" type="com.cs.workdream.board.model.vo.Reply"/>
+ 		
+ 		<typeAlias alias="UserTag" type="com.cs.workdream.usertags.model.vo.UserTag"/>
+ 		<typeAlias alias="SelfIntro" type="com.cs.workdream.selfintro.model.vo.SelfIntro"/>
+ 		<typeAlias alias="Planner" type="com.cs.workdream.planner.model.vo.Planner"/>
+ 		<typeAlias alias="Portfolio" type="com.cs.workdream.portfolio.model.vo.Portfolio"/>
+ 		
+ 		<typeAlias alias="Business" type="com.cs.workdream.business.model.vo.Business"/>
+        <typeAlias alias="BusinessBenefit" type="com.cs.workdream.business.model.vo.BusinessBenefit"/>
+        <typeAlias alias="WorkEnvironmentImage" type="com.cs.workdream.business.model.vo.WorkEnvironmentImage"/>
+        
+        <typeAlias alias="Recruitment" type="com.cs.workdream.business.model.vo.Recruitment"/>
+        <typeAlias alias="Applicants" type="com.cs.workdream.business.model.vo.Applicants" />
+ 		<typeAlias alias="Position" type="com.cs.workdream.business.model.vo.Position" />
+ 		<typeAlias alias="BusinessBookmark" type="com.cs.workdream.business.model.vo.BusinessBookmark" />
+ 		
+ 		<typeAlias alias="ChatHistory" type="com.cs.workdream.chat.model.vo.ChatHistory" />
+        <typeAlias alias="ChatList" type="com.cs.workdream.chat.model.vo.ChatList" />
+ 				
+	</typeAliases>
+ 	
+ 	<!-- mapper 경로 등록 -->
+	<mappers>
+		<mapper resource="mappers/common-mapper.xml"/>
+		<mapper resource="mappers/member-mapper.xml"/>
+		<mapper resource="mappers/board-mapper.xml"/>
+		
+		<mapper resource="mappers/person-mapper.xml"/>
+		<mapper resource="mappers/resume-mapper.xml"/>
+		<mapper resource="mappers/selfintro-mapper.xml"/>
+		
+		<mapper resource="mappers/business-mapper.xml"/>
+		<mapper resource="mappers/businessprofile-mapper.xml"/>
+		
+		<mapper resource="mappers/usertags-mapper.xml"/>
+		<mapper resource="mappers/planner-mapper.xml"/>
+		<mapper resource="mappers/portfolio-mapper.xml"/>
+		<mapper resource="mappers/chat-mapper.xml"/>
+	</mappers>
+ 	
+</configuration>

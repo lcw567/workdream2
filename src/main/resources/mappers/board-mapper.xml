@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="boardMapper">
+
+
+
+    <!-- 카테고리 및 페이징 처리된 게시물 조회 -->
+    <select id="selectPosts" parameterType="map" resultType="com.cs.workdream.board.model.vo.Board">
+        SELECT 
+            POSTING_NO,
+            CATEGORY,
+            TITLE,
+            CONTENT,
+            IMAGE,
+            AUTHOR,
+            USER_NO,
+            CREATED_TIME,
+            UPDATED_TIME,
+            VIEW_COUNT,
+            LIKE_COUNT,
+            STATUS
+        FROM POSTING
+        WHERE 
+            (#{category} = '전체글' OR CATEGORY = #{category}) AND
+            STATUS = 'Y'
+        ORDER BY 
+            CASE 
+                WHEN #{filter} = '최신순' THEN CREATED_TIME
+                WHEN #{filter} = '조회순' THEN VIEW_COUNT
+                WHEN #{filter} = '공감 많은 순' THEN LIKE_COUNT
+            END DESC
+    </select>
+    
+    
+    
+    <select id="selectFilteredPosts" parameterType="map" resultType="com.cs.workdream.board.model.vo.Board">
+	    SELECT * FROM (
+	        SELECT 
+	            A.*,
+	            NVL(C.commentCount, 0) AS commentCount, -- 댓글 수 추가
+	            ROWNUM AS RNUM
+	        FROM (
+	            SELECT 
+	                p.POSTING_NO AS postingNo,
+	                p.CATEGORY,
+	                p.TITLE,
+	                p.CONTENT,
+	                p.AUTHOR,
+	                p.USER_NO AS userNo,
+	                p.CREATED_TIME AS createdTime,
+	                p.UPDATED_TIME AS updatedTime,
+	                p.VIEW_COUNT AS viewCount,
+	                p.LIKE_COUNT AS likeCount,
+	                p.STATUS
+	            FROM POSTING p
+	            WHERE 
+	                p.STATUS = 'Y'
+	                <if test="category != null and category != '전체글'">
+	                    AND p.CATEGORY = #{category}
+	                </if>
+	                <if test="jobFilter != null and jobFilter != ''">
+	                    AND EXISTS (
+	                        SELECT 1 FROM COMMUNITY_POST_JOB_CATEGORY c
+	                        WHERE c.POSTING_NO = p.POSTING_NO AND c.JOB_CATEGORY = #{jobFilter}
+	                    )
+	                </if>
+	            <choose>
+	                <when test="filter eq '최신순'">
+	                    ORDER BY p.CREATED_TIME DESC
+	                </when>
+	                <when test="filter eq '조회순'">
+	                    ORDER BY p.VIEW_COUNT DESC
+	                </when>
+	                <when test="filter eq '공감 많은 순'">
+	                    ORDER BY p.LIKE_COUNT DESC
+	                </when>
+	                <otherwise>
+	                    ORDER BY p.CREATED_TIME DESC
+	                </otherwise>
+	            </choose>
+	        ) A
+	        LEFT JOIN (
+	            SELECT 
+	                POSTING_NO, 
+	                COUNT(*) AS commentCount
+	            FROM REPLY
+	            WHERE STATUS = 'Y'
+	            GROUP BY POSTING_NO
+	        ) C ON A.postingNo = C.POSTING_NO
+	    )
+	    WHERE RNUM &gt; #{offset} AND RNUM &lt;= #{offset} + #{limit}
+	</select>
+	
+	<!-- 필터링된 게시물 수 조회 -->
+	<select id="countFilteredPosts" parameterType="map" resultType="int">
+	    SELECT COUNT(*) FROM POSTING p
+	    WHERE 
+	        p.STATUS = 'Y'
+	        <if test="category != null and category != '전체글'">
+	            AND p.CATEGORY = #{category}
+	        </if>
+	        <if test="jobFilter != null and jobFilter != ''">
+	            AND EXISTS (
+	                SELECT 1 FROM COMMUNITY_POST_JOB_CATEGORY c
+	                WHERE c.POSTING_NO = p.POSTING_NO AND c.JOB_CATEGORY = #{jobFilter}
+	            )
+	        </if>
+	</select>
+
+
+    <!-- 전체 게시물 수 조회 -->
+    <select id="countAllPosts" resultType="int">
+        SELECT COUNT(*) FROM POSTING
+        WHERE STATUS = 'Y'
+    </select>
+
+    <!-- 카테고리별 게시물 수 조회 -->
+    <select id="countPostsByCategory" parameterType="string" resultType="int">
+        SELECT COUNT(*) FROM POSTING
+        WHERE CATEGORY = #{category} AND STATUS = 'Y'
+    </select>
+
+    <!-- 인기 게시물 조회 (조회수 기준 상위 5개) -->
+	<select id="selectPopularPosts" resultType="com.cs.workdream.board.model.vo.Board">
+	    <![CDATA[
+	        SELECT 
+	            A.postingNo,
+	            A.category,
+	            A.title,
+	            A.content,
+	            A.imagePath,
+	            A.author,
+	            A.userNo,
+	            A.createdTime,
+	            A.updatedTime,
+	            A.viewCount,
+	            A.likeCount,
+	            A.status,
+	            NVL(C.commentCount, 0) AS commentCount
+	        FROM (
+	            SELECT 
+	                POSTING_NO AS postingNo,
+	                CATEGORY,
+	                TITLE,
+	                DBMS_LOB.SUBSTR(CONTENT, 4000, 1) AS content, 
+	                IMAGE AS imagePath,
+	                AUTHOR,
+	                USER_NO AS userNo,
+	                CREATED_TIME AS createdTime,
+	                UPDATED_TIME AS updatedTime,
+	                VIEW_COUNT AS viewCount,
+	                LIKE_COUNT AS likeCount,
+	                STATUS
+	            FROM POSTING
+	            WHERE STATUS = 'Y'
+	            ORDER BY VIEW_COUNT DESC
+	        ) A
+	        LEFT JOIN (
+	            SELECT 
+	                POSTING_NO, 
+	                COUNT(*) AS commentCount
+	            FROM REPLY
+	            WHERE STATUS = 'Y'
+	            GROUP BY POSTING_NO
+	        ) C ON A.postingNo = C.POSTING_NO
+	        WHERE ROWNUM <= 5
+	    ]]>
+	</select>
+
+   <!-- 게시글 ID로 단일 게시글 조회 -->
+    <select id="selectPost" parameterType="int" resultType="com.cs.workdream.board.model.vo.Board">
+	    SELECT 
+	        POSTING_NO AS postingNo,
+	        CATEGORY AS category,
+	        TITLE AS title,
+	        CONTENT AS content,
+	        IMAGE AS imagePath,
+	        AUTHOR AS author,
+	        USER_NO AS userNo,
+	        CREATED_TIME AS createdTime,
+	        UPDATED_TIME AS updatedTime,
+	        VIEW_COUNT AS viewCount,
+	        LIKE_COUNT AS likeCount,
+	        STATUS AS status
+	    FROM POSTING
+	    WHERE POSTING_NO = #{value} AND STATUS = 'Y'
+	</select>
+
+    <!-- 새로운 게시글 삽입 -->
+    <insert id="insertPost" parameterType="com.cs.workdream.board.model.vo.Board">
+        <!-- 시퀀스에서 다음 값 가져오기 -->
+        <selectKey keyProperty="postingNo" resultType="java.lang.Integer" order="BEFORE">
+            SELECT POSTING_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        
+        <!-- 게시글 삽입 -->
+        INSERT INTO POSTING (
+            POSTING_NO, CATEGORY, TITLE, CONTENT, IMAGE, AUTHOR, USER_NO, CREATED_TIME, UPDATED_TIME, VIEW_COUNT, LIKE_COUNT, STATUS
+        ) VALUES (
+            #{postingNo}, #{category}, #{title}, #{content}, #{imagePath}, #{author}, #{userNo}, SYSDATE, NULL, 0, 0, 'Y'
+        )
+    </insert>
+
+
+    <!-- 기존 게시글 업데이트 -->
+    <update id="updatePost" parameterType="com.cs.workdream.board.model.vo.Board">
+        UPDATE POSTING
+        SET CATEGORY = #{category},
+            TITLE = #{title},
+            CONTENT = #{content},
+            IMAGE = #{imagePath},
+            UPDATED_TIME = SYSDATE
+        WHERE POSTING_NO = #{postingNo} AND STATUS = 'Y'
+    </update>
+
+    <!-- 게시글 소프트 삭제 -->
+    <update id="deletePost" parameterType="int">
+        UPDATE POSTING
+        SET STATUS = 'N'
+        WHERE POSTING_NO = #{value}
+    </update>
+
+    <!-- 특정 게시글의 해시태그 조회 -->
+    <select id="selectHashtags" parameterType="int" resultType="string">
+        SELECT HASHTAG FROM COMMUNITY_POST_HASHTAG
+        WHERE POSTING_NO = #{postingNo}
+    </select>
+    
+    <!-- 직무 카테고리 조회 -->
+    <select id="selectJobCategoriesByPostId" parameterType="map" resultType="string">
+	    SELECT JOB_CATEGORY
+	    FROM COMMUNITY_POST_JOB_CATEGORY
+	    WHERE POSTING_NO = #{postingNo}
+	</select>
+
+    <!-- insertJobCategory 쿼리 -->
+    <insert id="insertJobCategory" parameterType="map">
+        INSERT INTO COMMUNITY_POST_JOB_CATEGORY (POSTING_NO, JOB_CATEGORY)
+        VALUES (#{postingNo}, #{jobCategory})
+    </insert>
+
+    <!-- 해시태그 삽입 -->
+    <insert id="insertHashtag" parameterType="map">
+        INSERT INTO COMMUNITY_POST_HASHTAG (POSTING_NO, HASHTAG)
+        VALUES (#{postingNo}, #{hashtag})
+    </insert>
+    
+    <!-- 조회수 증가 -->
+	<update id="increaseViewCount" parameterType="int">
+	    UPDATE POSTING
+	    SET VIEW_COUNT = VIEW_COUNT + 1
+	    WHERE POSTING_NO = #{postingNo}
+	</update>
+	
+
+    <!-- Reply ResultMap -->
+    <resultMap id="ReplyResultMap" type="com.cs.workdream.board.model.vo.Reply">
+        <id property="replyNo" column="REPLY_NO" />
+        <result property="postingNo" column="POSTING_NO" />
+        <result property="userNo" column="USER_NO" />
+        <result property="author" column="AUTHOR" />
+        <result property="content" column="CONTENT" />
+        <result property="createdTime" column="CREATED_TIME" />
+        <result property="likeCount" column="LIKE_COUNT" />
+        <result property="status" column="STATUS" />
+    </resultMap>
+
+    <!-- 특정 게시글의 댓글 조회 -->
+    <select id="selectReplies" parameterType="int" resultMap="ReplyResultMap">
+	    SELECT 
+	        r.REPLY_NO,
+	        r.POSTING_NO,
+	        r.USER_NO,
+	        COALESCE(u.USER_ID, b.USER_ID) AS AUTHOR, -- 작성자를 PERSON이나 BUSINESS에서 가져오기
+	        r.CONTENT,
+	        r.CREATED_TIME,
+	        r.LIKE_COUNT,
+	        r.STATUS
+	    FROM REPLY r
+	    LEFT JOIN MEMBER u ON r.USER_NO = u.USER_NO AND u.USER_TYPE = 'P' -- 개인 사용자
+	    LEFT JOIN MEMBER b ON r.USER_NO = b.USER_NO AND b.USER_TYPE = 'B' -- 기업 사용자
+	    WHERE r.POSTING_NO = #{value} AND r.STATUS = 'Y'
+	    ORDER BY r.CREATED_TIME ASC
+	</select>
+
+    <!-- 댓글 ID로 댓글 조회 -->
+    <select id="selectReplyById" parameterType="int" resultMap="ReplyResultMap">
+	    SELECT 
+	        r.REPLY_NO,
+	        r.POSTING_NO,
+	        r.USER_NO,
+	        COALESCE(u.USER_ID, b.USER_ID) AS AUTHOR, -- 작성자를 PERSON이나 BUSINESS에서 가져오기
+	        r.CONTENT,
+	        r.CREATED_TIME,
+	        r.LIKE_COUNT,
+	        r.STATUS
+	    FROM REPLY r
+	    LEFT JOIN MEMBER u ON r.USER_NO = u.USER_NO AND u.USER_TYPE = 'P'
+	    LEFT JOIN MEMBER b ON r.USER_NO = b.USER_NO AND b.USER_TYPE = 'B'
+	    WHERE r.REPLY_NO = #{value} AND r.STATUS = 'Y'
+	</select>
+
+    <!-- 댓글 삽입 -->
+    <insert id="insertReply" parameterType="com.cs.workdream.board.model.vo.Reply">
+        <!-- 시퀀스에서 다음 값 가져오기 -->
+        <selectKey keyProperty="replyNo" resultType="java.lang.Integer" order="BEFORE">
+            SELECT REPLY_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        
+        <!-- 댓글 삽입 -->
+        INSERT INTO REPLY (
+            REPLY_NO, POSTING_NO, USER_NO, CONTENT, CREATED_TIME, LIKE_COUNT, STATUS
+        ) VALUES (
+            #{replyNo}, #{postingNo}, #{userNo}, #{content}, SYSDATE, 0, 'Y'
+        )
+    </insert>
+
+    <!-- 댓글 소프트 삭제 -->
+    <update id="deleteReply" parameterType="int">
+        UPDATE REPLY
+        SET STATUS = 'N'
+        WHERE REPLY_NO = #{value}
+    </update>
+    
+     <!-- 게시글 공감 기록 존재 여부 확인 -->
+    <select id="existsPostLike" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM POST_LIKE
+        WHERE POSTING_NO = #{postingNo} AND USER_NO = #{userNo}
+    </select>
+
+    <!-- 게시글 공감 기록 삽입 -->
+    <insert id="insertPostLike" parameterType="map">
+        INSERT INTO POST_LIKE (LIKE_NO, POSTING_NO, USER_NO, LIKED_TIME)
+        VALUES (POST_LIKE_SEQ.NEXTVAL, #{postingNo}, #{userNo}, SYSDATE)
+    </insert>
+
+    <!-- 게시글 공감 기록 삭제 -->
+    <delete id="deletePostLike" parameterType="map">
+        DELETE FROM POST_LIKE
+        WHERE POSTING_NO = #{postingNo} AND USER_NO = #{userNo}
+    </delete>
+
+    <!-- 게시글 공감 수 증가 -->
+    <update id="increasePostLikeCount" parameterType="int">
+        UPDATE POSTING
+        SET LIKE_COUNT = LIKE_COUNT + 1
+        WHERE POSTING_NO = #{value} AND STATUS = 'Y'
+    </update>
+
+    <!-- 게시글 공감 수 감소 -->
+    <update id="decreasePostLikeCount" parameterType="int">
+        UPDATE POSTING
+        SET LIKE_COUNT = LIKE_COUNT - 1
+        WHERE POSTING_NO = #{value} AND LIKE_COUNT > 0 AND STATUS = 'Y'
+    </update>
+
+    <!-- 댓글 공감 기록 존재 여부 확인 -->
+    <select id="existsReplyLike" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM REPLY_LIKE
+        WHERE REPLY_NO = #{replyNo} AND USER_NO = #{userNo}
+    </select>
+
+    <!-- 댓글 공감 기록 삽입 -->
+    <insert id="insertReplyLike" parameterType="map">
+        INSERT INTO REPLY_LIKE (LIKE_NO, REPLY_NO, USER_NO, LIKED_TIME)
+        VALUES (REPLY_LIKE_SEQ.NEXTVAL, #{replyNo}, #{userNo}, SYSDATE)
+    </insert>
+
+    <!-- 댓글 공감 기록 삭제 -->
+    <delete id="deleteReplyLike" parameterType="map">
+        DELETE FROM REPLY_LIKE
+        WHERE REPLY_NO = #{replyNo} AND USER_NO = #{userNo}
+    </delete>
+
+    <!-- 댓글 공감 수 증가 -->
+    <update id="increaseReplyLikeCount" parameterType="int">
+        UPDATE REPLY
+        SET LIKE_COUNT = LIKE_COUNT + 1
+        WHERE REPLY_NO = #{value} AND STATUS = 'Y'
+    </update>
+
+    <!-- 댓글 공감 수 감소 -->
+    <update id="decreaseReplyLikeCount" parameterType="int">
+        UPDATE REPLY
+        SET LIKE_COUNT = LIKE_COUNT - 1
+        WHERE REPLY_NO = #{value} AND LIKE_COUNT > 0 AND STATUS = 'Y'
+    </update>
+
+    <!-- 제목으로 게시글 검색 -->
+	<select id="searchPostsByTitle" parameterType="map" resultType="com.cs.workdream.board.model.vo.Board">
+	    <![CDATA[
+	        SELECT * FROM (
+	            SELECT p.*, ROWNUM AS rnum
+	            FROM (
+	                SELECT 
+	                    POSTING_NO AS postingNo,
+	                    CATEGORY AS category,
+	                    TITLE AS title,
+	                    CONTENT AS content,
+	                    IMAGE AS imagePath,
+	                    AUTHOR AS author,
+	                    USER_NO AS userNo,
+	                    CREATED_TIME AS createdTime,
+	                    UPDATED_TIME AS updatedTime,
+	                    VIEW_COUNT AS viewCount,
+	                    LIKE_COUNT AS likeCount,
+	                    STATUS AS status
+	                FROM POSTING
+	                WHERE TITLE LIKE #{title} AND STATUS = 'Y'
+	                ORDER BY CREATED_TIME DESC
+	            ) p
+	            WHERE ROWNUM <= #{endRow}
+	        )
+	        WHERE rnum > #{offset}
+	    ]]>
+	</select>
+
+    <!-- 제목으로 검색된 게시글 수 조회 -->
+    <select id="countSearchPostsByTitle" parameterType="string" resultType="int">
+        SELECT COUNT(*) FROM POSTING
+        WHERE TITLE LIKE #{title} AND STATUS = 'Y'
+    </select>
+    
+    <!-- 기존 해시태그 전체 삭제 -->
+	<delete id="deleteHashtagsByPost" parameterType="int">
+	    DELETE FROM COMMUNITY_POST_HASHTAG
+	    WHERE POSTING_NO = #{postingNo}
+	</delete>
+	
+	<delete id="deleteJobCategoriesByPost" parameterType="int">
+	    DELETE FROM COMMUNITY_POST_JOB_CATEGORY
+	    WHERE POSTING_NO = #{postingNo}
+	</delete>
+	
+    
+    
+
+</mapper>

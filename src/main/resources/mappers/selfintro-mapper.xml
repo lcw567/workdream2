@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cs.workdream.resume.mapper.SelfIntroMapper">
+
+    <!-- ResultMap 수정: 완전한 패키지 경로 추가 -->
+    <resultMap type="com.cs.workdream.selfintro.model.vo.SelfIntro" id="selfintroResultSet">
+        <result column="SELF_INTRODUCTION_NO" property="selfintroNo" />
+        <result column="RESUME_NO" property="resumeNo" />
+        <result column="USER_ID" property="userId" />
+        <result column="TITLE" property="introTitle" />
+        <result column="CONTENT" property="introContent" />
+        <result column="CREATED_DATE" property="createDate" />
+        <result column="MODIFIED_DATE" property="modifiedDate" />
+        <result column="DELETED" property="deleted" />
+        <result column="PERSON_NO" property="personNo" />
+    </resultMap>
+    
+    <!-- Insert 매핑 -->
+    <insert id="insertSelfIntro" parameterType="com.cs.workdream.selfintro.model.vo.SelfIntro">
+    <selectKey keyProperty="selfintroNo" resultType="int" order="BEFORE">
+        SELECT SELF_INTRO_SEQ.NEXTVAL FROM DUAL
+    </selectKey>
+    INSERT INTO SELF_INTRODUCTION (
+        SELF_INTRODUCTION_NO,
+        RESUME_NO,
+        USER_ID,
+        TITLE,
+        CONTENT,
+        CREATED_DATE,
+        MODIFIED_DATE,
+        DELETED,
+        PERSON_NO,
+        USER_NO
+    ) VALUES (
+        #{selfintroNo},    
+        #{resumeNo},       
+        #{userId},        
+        #{introTitle},    
+        #{introContent},  
+        SYSDATE,          
+        NULL,             
+        #{deleted},       
+        #{personNo},
+        #{userNo}  
+    )
+</insert>
+
+    <!-- Select 리스트 매핑 -->
+   <select id="selectSelfIntroList" parameterType="String" resultType="com.cs.workdream.selfintro.model.vo.SelfIntro">
+	    SELECT 
+	        SELF_INTRODUCTION_NO AS selfintroNo,
+	        RESUME_NO AS resumeNo,
+	        USER_ID AS userId,
+	        TITLE AS introTitle,
+	        CONTENT AS introContent,
+	        CREATED_DATE AS createDate,
+	        MODIFIED_DATE AS modifiedDate,
+	        DELETED AS deleted,
+	        PERSON_NO AS personNo,
+	        USER_NO AS userNo
+	    FROM SELF_INTRODUCTION
+	    WHERE USER_ID = #{userId}
+	      AND DELETED = 'N'
+	    ORDER BY CREATED_DATE DESC
+	</select>
+
+    
+    <!-- Select by ID 매핑 추가 -->
+   <select id="selectSelfIntroById" parameterType="int" resultType="com.cs.workdream.selfintro.model.vo.SelfIntro">
+	    SELECT 
+	        SELF_INTRODUCTION_NO AS selfintroNo,
+	        RESUME_NO AS resumeNo,
+	        USER_ID AS userId,
+	        TITLE AS introTitle,
+	        CONTENT AS introContent,
+	        CREATED_DATE AS createDate,
+	        MODIFIED_DATE AS modifiedDate,
+	        DELETED AS deleted,
+	        PERSON_NO AS personNo,
+	        USER_NO AS userNo
+	    FROM SELF_INTRODUCTION
+	    WHERE SELF_INTRODUCTION_NO = #{value}
+	      AND DELETED = 'N'
+	</select>
+
+    <!-- Delete 매핑 -->
+    <update id="deleteSelfIntro" parameterType="int">
+	    UPDATE SELF_INTRODUCTION
+	    SET DELETED = 'Y'
+	    WHERE SELF_INTRODUCTION_NO = #{value}
+	      AND DELETED = 'N'
+	</update>
+
+    <!-- Update 매핑 -->
+    <update id="updateSelfIntro" parameterType="com.cs.workdream.selfintro.model.vo.SelfIntro">
+        UPDATE SELF_INTRODUCTION
+        SET 
+            TITLE = #{introTitle},
+            CONTENT = #{introContent},
+            MODIFIED_DATE = SYSDATE
+        WHERE 
+            SELF_INTRODUCTION_NO = #{selfintroNo}
+            AND DELETED = 'N'
+    </update>
+    
+    <select id="selectSelfIntroByNo" parameterType="int" resultMap="selfintroResultSet">
+	    SELECT *
+	    FROM SELF_INTRODUCTION
+	    WHERE SELF_INTRODUCTION_NO = #{selfintroNo} AND DELETED ='N'
+    </select>
+    
+    <select id="selectSelfIntroByPersonNo" parameterType="int" resultMap="selfintroResultSet">
+    	SELECT *
+    	FROM SELF_INTRODUCTION
+    	WHERE PERSON_NO = #{personNo} AND DELETED ='N'
+    	ORDER BY CREATED_DATE DESC
+    </select>
+
+</mapper>

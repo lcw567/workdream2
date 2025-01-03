@@ -1,0 +1,501 @@
+@charset "UTF-8";
+
+/* applicantsStatus.jsp */
+#applicantsStatus-main {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#applicantsStatus-main > section {
+	width: 95%;
+	max-width: 1280px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#applicantsStatus-section-all {
+	padding: 1.5rem 0;
+	border-bottom: 1px solid #4E21A8;
+}
+
+#applicantsStatus-section-all .allStatus {
+	width: 80%;
+}
+
+#applicantsStatus-section-all .allStatus tr {
+	height: 3rem;
+}
+
+#applicantsStatus-section-all .allStatus th, #applicantsStatus-section-all .allStatus td {
+	text-align: center;
+	vertical-align: center;
+	font-family: 'MonoplexKR-SemiBold';
+}
+
+#applicantsStatus-section-all .allStatus th {
+	font-size: 1.3rem;
+}
+
+#applicantsStatus-section-all .allStatus td {
+	font-size: 1.5rem;
+}
+
+#applicantsStatus-section-position {
+	min-height: 600px;
+	padding: 0.5%;
+}
+
+#applicantsStatus-section-position .positionStatus {
+	width: 100%;
+	height: 5rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1% 3%;
+	margin: 1rem 0;
+	border: 2px solid #4E21A8;
+	border-radius: 10px;
+}
+
+#applicantsStatus-section-position .positionStatus > h1 {
+	min-width: 200px;
+	margin: 0;
+	text-align: left;
+	white-space: nowrap;
+	font-family: 'MonoplexKR-SemiBold';
+	font-size: 1.5rem;
+}
+
+#applicantsStatus-section-position .positionStatus > table {
+	min-width: 450px;
+}
+
+#applicantsStatus-section-position .positionStatus > table th {
+	width: 7rem;
+	font-size: 0.875rem;
+	color: #4E21A8;
+}
+
+#applicantsStatus-section-position .positionStatus > table td {
+	text-align: center;
+	font-size: 1.5rem;
+}
+
+#applicantsStatus-section-position .positionStatus > a {
+	min-width: 100px;
+	font-family: 'MonoplexKR-SemiBold';
+	font-size: 1.3rem;
+	color: #4E21A8;
+}
+
+#applicantsStatus-section-position .positionStatus > a:hover {
+	text-decoration: underline 1.5px solid #4E21A8;
+}
+
+
+/* applicantsList.jsp */
+#applicantsList-main {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	padding: 1%;
+}
+
+#applicantsList-main .returnStatus {
+	align-self: flex-start;
+	font-family: 'MonoplexKR-Bold';
+	font-size: 1rem;
+	color: #4E21A8;
+}
+
+#applicantsList-main > section {
+	width: 100%;
+	max-width: 1280px;
+	display: flex;
+}
+
+#applicantsList-section-board {
+	height: 200px;
+	justify-content: space-between;
+	align-items: center;
+	padding: 2rem 0;
+}
+
+#applicantsList-section-board > article {
+	height: 100%;
+	display: flex;
+	align-items: center;
+}
+
+#applicantsList-section-board .postionInfo {
+	width: 48%;
+	justify-content: center;
+	padding: 1% 0;
+	border: 2px solid #4E21A8;
+	border-radius: 15px;
+}
+
+#applicantsList-section-board .postionInfo > h2 {
+	width: 55%;
+	white-space: wrap;
+	text-align: center;
+	font-family: 'MonoplexKR-SemiBold';
+	font-size: 1.4rem;
+}
+
+#applicantsList-section-board .postionInfo > div {
+	width: 40%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border-left: 1.3px solid #E1DEF1;
+}
+
+#applicantsList-section-board .postionInfo > div > * {
+	margin: 0.2rem 0;
+	text-align: center;
+}
+
+#applicantsList-section-board .postionInfo > div > h4 {
+	font-family: 'MonoplexKR-Bold';
+	font-size: 1.2rem;
+}
+
+#applicantsList-section-board .postionInfo > div > p {
+	font-size: 0.9rem;
+}
+
+#applicantsList-section-board .postionInfo > div > h5 {
+	width: 5rem;
+	height: 1.5rem;
+	background-color: #4E21A8;
+	border: 1px solid #4E21A8;
+	border-radius: 0.3rem;
+	line-height: 1.4rem;
+	font-size: 1rem;
+	color: #FFFFFF;
+}
+
+#applicantsList-section-board .positionStats {
+	width: 50%;
+	justify-content: space-between;
+}
+
+#applicantsList-section-board .positionStats > div {
+	width: 30%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border: 2px solid #4E21A8;
+	border-radius: 15px;
+}
+
+#applicantsList-section-board .positionStats > div > * {
+	margin: 0;
+}
+
+#applicantsList-section-board .positionStats > div > h6 {
+	font-family: 'MonoplexKR-Regular';
+	font-size: 1.1rem;
+}
+
+#applicantsList-section-board .positionStats > div > h1 {
+	font-family: 'MonoplexKR-Bold';
+	font-size: 3rem;
+}
+
+#applicantsList-section-list {
+	min-height: 600px;
+	flex-direction: column;
+	align-items: center;
+}
+
+#applicantsList-section-list > * {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#applicantsList-section-list .list-tab {
+	width: 100%;
+	height: 2.5rem;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	border-bottom: 2px solid #E1DEF1;
+}
+
+#applicantsList-section-list .list-tab > li {
+	min-width: 8rem;
+	height: 100%;
+	margin-block-end: -0.2rem;
+	border-collapse: collapse;
+	cursor: pointer;
+	text-align: center;
+}
+
+#applicantsList-section-list .list-tab > li > a {
+	font-family: 'MonoplexKR-SemiBold';
+	font-size: 1.2rem;
+}
+
+#applicantsList-section-list .list-tab > li:hover {
+	border-bottom: 2px solid #6D47B7;
+}
+
+#applicantsList-section-list .list-tab > li:hover > a {
+	color: #6D47B7;
+}
+
+#applicantsList-section-list .list-tab > li.On {
+	border-bottom: 2px solid #4E21A8;
+}
+
+#applicantsList-section-list .list-tab > li.On > a {
+	font-family: 'MonoplexKR-Bold';
+	color: #4E21A8;
+}
+
+#applicantsList-section-list .list-button {
+	width: 100%;
+	height: 2.5rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: relative;
+	padding: 0 1%;
+}
+
+#applicantsList-section-list .list-button > ol {
+	height: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+#applicantsList-section-list .list-button > ol * {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0);
+	border: none;
+	vertical-align: middle;
+	font-family: 'MonoplexKR-Bold';
+}
+
+#applicantsList-section-list .list-button > ol.leftSide * {
+	font-size: 0.9rem;
+	color: #4E21A8;
+}
+
+#applicantsList-section-list .list-button > ol.leftSide li {
+	min-width: 5rem;
+	height: 80%;
+	margin-right: 1rem;
+}
+
+#applicantsList-section-list .list-button > ol.leftSide button {
+	line-height: 1;
+}
+
+#applicantsList-section-list .list-button > ol.leftSide img {
+	width: 1.2rem;
+	height: 1.2rem;
+}
+
+#applicantsList-section-list .list-button > ol.rightSide * {
+	font-size: 0.7rem;
+	color: #6D47B7;
+}
+
+#applicantsList-section-list .list-button > ol.rightSide li {
+	min-width: 3.5rem;
+	margin-right: 0.5rem;
+}
+
+#applicantsList-section-list .list-button > ol.rightSide img {
+	width: 1rem;
+	height: 1rem;
+}
+
+#applicantsList-section-list .list-filter {
+	width: auto;
+	min-width: 1000px;
+	max-width: 1280px;
+	display: none;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: stretch;
+	position: absolute;
+	top: calc(330px + 2.5rem);
+	z-index: 1;
+	padding: 3% 5%;
+	background-color: rgba(255, 255, 255, 0.95);
+	border: 1px solid #E1DEF1;
+	border-radius: 10px;
+    box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
+}
+
+#applicantsList-section-list .list-filter table {
+	width: 100%;
+}
+
+#applicantsList-section-list .list-filter table td {
+	vertical-align: top;
+}
+
+#applicantsList-section-list .list-filter table td * {
+	white-space: nowrap;
+	font-family: 'MonoplexKR-Regular';
+	font-weight: 400;
+	font-size: 0.9rem
+}
+
+#applicantsList-section-list .list-filter table td > span {
+	width: 100%;
+	min-height: 2rem;
+	display: inline-flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 1rem;
+}
+
+#applicantsList-section-list .list-filter table td > span:last-child {
+	margin-bottom: 1rem;
+}
+
+#applicantsList-section-list .list-filter table td > span > h1 {
+	font-family: 'MonoplexKR-SemiBold';
+	font-size: 1rem;
+}
+
+#applicantsList-section-list .list-filter table td > span > input[type="number"] {
+	width: 4.5rem;
+	height: 1.5rem;
+}
+
+#applicantsList-section-list .list-filter table td > button {
+	width: 5rem;
+	height: 2rem;
+	margin: 0.3rem 0 0.3rem 2rem;
+	border-radius: 5px;
+	font-family: 'MonoplexKR-SemiBold';
+	color: #FFFFFF;
+}
+
+#applicantsList-section-list .list-filter table td > button[type="submit"] {
+	background-color: #4E21A8;
+	border: 1px solid #4E21A8;
+}
+
+#applicantsList-section-list .list-filter table td > button[type="reset"] {
+	background-color: #B4A3DB;
+	border: 1px solid #B4A3DB;
+}
+
+#applicantsList-section-list .list-filter table td > button[type="button"] {
+	margin-top: 2rem;
+	background-color: #FFFFFF;
+	border: 1px solid #4E21A8;
+	color: #4E21A8;
+}
+
+#applicantsList-section-list .list-table {
+	width: 100%;
+	font-size: 0.9rem;
+}
+
+#applicantsList-section-list .list-table th {
+	min-width: 2rem;
+	height: 3rem;
+	font-family: 'MonoplexKR-Regular';
+	font-size: 0.8rem;
+}
+
+#applicantsList-section-list .list-table thead th {
+	background-color: #E1DEF1;
+}
+
+#applicantsList-section-list .list-table tbody td {
+	height: 7rem;
+	border-bottom: 1.2px solid #E1DEF1;
+	vertical-align: middle;
+	text-align: center;
+}
+
+#applicantsList-section-list .list-table tbody td, #applicantsList-section-list .list-table tbody td * {
+	font-family: 'MonoplexKR-SemiBold';
+	font-size: 0.95rem;
+}
+
+#applicantsList-section-list .list-table tbody td.btnList {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#applicantsList-section-list .list-table tbody td.btnList > button {
+	width: 1rem;
+	height: 1rem;
+	margin: 0 -1.3rem 0 0.3rem;
+	background-color: rgba(0, 0, 0, 0);
+	border: 0;
+}
+
+#applicantsList-section-list .list-table tbody td.btnList > button > img {
+	width: 100%;
+	height: 100%;
+}
+
+#applicantsList-section-list .list-table tbody td.photo > span {
+	width: 5rem;
+	height: 5.5rem;
+	display: inline-block;
+	background: url("../img/icon_noImg.png");
+	background-size: 1.5rem 1.5rem;
+	background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid #E1DEF1;
+}
+
+#applicantsList-section-list .list-table tbody td.photo > span > img {
+	width: 100%;
+	height: 100%;
+}
+
+#applicantsList-section-list .list-table tbody td.profile > * {
+	width: 100%;
+	text-align: left;
+}
+
+#applicantsList-section-list .list-table tbody td.profile > h1 {
+	margin-bottom: 0.5rem;
+	font-family: 'MonoplexKR-Bold';
+	font-size: 1rem;
+}
+
+#applicantsList-section-list .list-table tbody td.profile > p {
+	font-family: 'MonoplexKR-Regular';
+}
+
+#applicantsList-section-list .list-table tbody td.pass > select {
+	width: 90%;
+	height: 2rem;
+	border: 1.5px solid #6D47B7; 
+	text-align: center;
+	font-family: 'MonoplexKR-Regular';
+}
+
+#applicantsList-section-list .list-table tbody td.pass > select > option {
+	font-family: 'MonoplexKR-Regular';
+}

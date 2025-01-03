@@ -1,0 +1,211 @@
+/* recruitmentRegister1.jsp */
+#Job_Posting {
+	width: 95%;
+	max-width: 1280px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+    padding: 1% 3%;
+}
+
+#Job_Posting_Registration {
+	width: 100%;
+	padding: 3%;
+	border-bottom: 2px solid #4E21A8;
+}
+
+#Job_Posting_Registration > h2 {
+	white-space: nowrap;
+	font-family: 'MonoplexKR-SemiBold';
+    font-size: 1.3rem;
+    color: #4E21A8;
+}
+
+#Job_Posting_Registration_content {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 1% 5%;
+}
+
+#Job_Posting_Registration_content > * {
+	width: 100%;
+	margin: 1% 0;
+}
+
+#Job_Posting_Registration_Index {
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 2px solid #B4A3DB;
+	border-radius: 3px;
+}
+
+#Job_Posting_Registration_Index > img {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    margin-right: 5px;
+}
+
+#Job_Posting_Registration_Index > p {
+	font-weight: bold;
+    font-size: 1rem;
+}
+
+#Job_Posting_Registration_Index > p.nonactivation {
+	color: #B4A3DB;
+}
+
+#Job_Posting_Registration_Index > hr {
+	width: 100px;
+    margin: 0 3%;
+    border: 2px solid black;
+}
+
+#Job_Posting_Registration_content > article {
+	display: flex;
+	flex-direction: column;
+}
+
+#Job_Posting_Registration_content h2.Information_Title {
+	margin-top: 3%;
+	font-size: 1.5rem;
+}
+
+#Job_Posting_Registration_content p {
+	margin: 1% 0;
+	white-space: nowrap;
+	word-spacing: -0.2rem;
+	font-size: 0.9rem;
+}
+
+#Job_Posting_Registration_content p.notice {
+	color: #656565;
+}
+
+#Job_Posting_Registration_content .Information {
+	width: 100%;
+	max-width: 400px;
+	min-height: 40px;
+	height: auto;
+	display: flex;
+	align-items: center;
+	margin: 1% 0;
+}
+
+#Job_Posting_Registration_content .Information > h3 {
+	min-width: 100px;
+	margin-right: 3%;
+	white-space: nowrap;
+	font-weight: bold;
+	font-size: 1.2rem;
+}
+
+#Job_Posting_Registration_content .Information > span {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 1% 0;
+}
+
+#Job_Posting_Registration_content .Information input {
+	width: 100%;
+	height: 2.5rem;
+	padding: 0 2%;
+	background-color: #FFFFFF;
+	border: 1.5px solid #000;
+	border-radius: 5px;
+	font-family: 'MonoplexKR-SemiBold';
+	font-size: 1rem;
+}
+
+#Job_Posting_Registration_content .Information input[readonly] {
+	background-color: #E1DEF1;
+}
+
+#Job_Posting_Registration_content .Information input::placeholder {
+	font-family: 'MonoplexKR-Regular';
+	font-size: 0.8rem;
+	color: #B4A3DB;
+}
+
+#Job_Posting_Registration_content .Information button {
+	min-width: 80px;
+	height: 2.5rem;
+	margin-left: 1%;
+	background-color: #4E21A8;
+    border: 1px solid #4E21A8;
+    border-radius: 5px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1rem;
+	color: #FFFFFF;
+}
+
+#Job_Posting_Registration_content .Information button:hover {
+    background-color: #3d1a85;
+}
+
+#Job_Posting_Registration_content .Information .Company_logo {
+	width: 120px;
+	height: 120px;
+	overflow: hidden;
+	margin: 3% 0;
+	border: 1px solid black;
+    border-radius: 5px;
+}
+
+#Job_Posting_Registration_content .Information .Company_logo > img {
+	width: 100%;
+	object-fit: contain;
+    object-position: center;
+}
+
+#Job_Posting_Registration_content .Information.column {
+	flex-direction: column;
+	align-items: flex-start;
+	margin-top: 5%;
+}
+
+#Job_Posting_Registration_content .Information.column input {
+	margin: 3% 0;
+}
+
+#Job_Posting_division_zones {
+    width: 100%;
+    height: 50px;
+    background-color: #F4F4F4;
+}
+
+.Next_Or_Back{
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 100px;
+}
+
+.Cancel_Push{
+    padding: 12px 34px;
+    background-color: #747474;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.Next_Push{
+    margin: 0 8px;
+    padding: 12px 34px;
+    background-color: #4E21A8;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-weight: 600;
+    font-size: 13px;
+}

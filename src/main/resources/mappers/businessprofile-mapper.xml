@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="businessProfileMapper">
+	
+	<!-- Business -->
+	<resultMap type="Business" id="businessResultSet">
+		<result column="BUSINESS_NO" property="businessNo" />
+		<result column="REGISTRATION_NUMBER" property="registrationNumber" />
+		<result column="OWNER_NAME" property="ownerName" />
+		<result column="COMPANY_NAME" property="companyName" />
+		<result column="COMPANY_CODE" property="companyCode" />
+		<result column="COMPANY_TEL" property="companyTel" />
+		<result column="COMPANY_ADDR" property="companyAddr" />
+		<result column="COMPANY_FAX" property="companyFax" />
+		<result column="COMPANY_SITE" property="companySite" />
+		<result column="LOGO" property="logo" />
+		<result column="SHORT_INTRODUCTION" property="shortIntroduction" />
+		<result column="INTRODUCTION" property="introduction" />
+		<result column="VISION" property="vision" />
+		<result column="COMPANY_TYPE" property="companyType" />
+		<result column="EMPLOYEE_COUNT" property="employeeCount" />
+		<result column="INDUSTRY" property="industry" />
+		<result column="BRAND_NAME" property="brandName" />
+		<result column="RECRUITMENT_TOTAL" property="recuritmentProgressCount" />
+		<result column="APPLICANTS_TOTAL" property="applicantsTotal" />
+		<result column="PASS_COUNT" property="passCount" />
+		<result column="BOOKMARK_TOTAL" property="bookmarkTotal" />
+	</resultMap>
+
+
+    <!-- 비즈니스 업데이트 -->
+    <update id="updateBusiness" parameterType="Business">
+        UPDATE BUSINESS SET
+            OWNER_NAME = #{ownerName},
+            COMPANY_NAME = #{companyName},
+            COMPANY_CODE = #{companyCode},
+            COMPANY_TEL = #{companyTel},
+            COMPANY_ADDR = #{companyAddr},
+            COMPANY_FAX = #{companyFax},
+            COMPANY_SITE = #{companySite},
+            LOGO = #{logo},
+            SHORT_INTRODUCTION = #{shortIntroduction},
+            INTRODUCTION = #{introduction},
+            VISION = #{vision},
+            COMPANY_TYPE = #{companyType},
+            EMPLOYEE_COUNT = #{employeeCount},
+            INDUSTRY = #{industry},
+            BRAND_NAME = #{brandName}
+        WHERE BUSINESS_NO = #{businessNo}
+    </update>
+    
+    <!-- 비즈니스 번호로 비즈니스 조회 -->
+    <select id="selectBusinessByNo" parameterType="int" resultMap="businessResultSet">
+        SELECT
+            BUSINESS_NO,
+            REGISTRATION_NUMBER,
+            OWNER_NAME,
+            COMPANY_NAME,
+            COMPANY_CODE,
+            COMPANY_TEL,
+            COMPANY_ADDR,
+            COMPANY_FAX,
+            COMPANY_SITE,
+            LOGO,
+            SHORT_INTRODUCTION,
+            INTRODUCTION,
+            VISION,
+            COMPANY_TYPE,
+            EMPLOYEE_COUNT,
+            INDUSTRY,
+            BRAND_NAME
+        FROM BUSINESS
+        WHERE BUSINESS_NO = #{businessNo}
+    </select>
+
+    <!-- 기존 복리후생 삭제 -->
+    <delete id="deleteBusinessBenefits" parameterType="int">
+        DELETE FROM BUSINESS_BENEFIT WHERE BUSINESS_NO = #{businessNo}
+    </delete>
+
+    <!-- 기존 근무 환경 이미지 삭제 -->
+    <delete id="deleteWorkEnvironmentImages" parameterType="int">
+        DELETE FROM WORK_ENVIRONMENT_IMAGE WHERE BUSINESS_NO = #{businessNo}
+    </delete>
+
+    <!-- 비즈니스 복리후생 등록 -->
+    <insert id="insertBusinessBenefit" parameterType="BusinessBenefit">
+        INSERT INTO BUSINESS_BENEFIT (BUSINESS_NO, BENEFIT)
+        VALUES (#{businessNo}, #{benefit})
+    </insert>
+
+    <!-- 근무 환경 이미지 등록 -->
+    <insert id="insertWorkEnvironmentImage" parameterType="WorkEnvironmentImage">
+        INSERT INTO WORK_ENVIRONMENT_IMAGE (
+            WORK_ENVIRONMENT_IMAGE_NO,
+            BUSINESS_NO,
+            IMAGE_URL,
+            TITLE
+        ) VALUES (
+            WORK_ENVIRONMENT_IMAGE_SEQ.NEXTVAL,
+            #{businessNo},
+            #{imageUrl},
+            #{title}
+        )
+    </insert>
+
+    <!-- 비즈니스 번호로 복리후생 목록 조회 -->
+    <select id="selectBenefitsByBusinessNo" parameterType="int" resultType="BusinessBenefit">
+        SELECT * FROM BUSINESS_BENEFIT WHERE BUSINESS_NO = #{businessNo}
+    </select>
+
+    <!-- 비즈니스 번호로 근무 환경 이미지 목록 조회 -->
+    <select id="selectWorkEnvironmentImagesByBusinessNo" parameterType="int" resultType="WorkEnvironmentImage">
+        SELECT
+            WORK_ENVIRONMENT_IMAGE_NO AS workEnvironmentImageNo,
+            BUSINESS_NO AS businessNo,
+            IMAGE_URL AS imageUrl,
+            TITLE AS title
+        FROM WORK_ENVIRONMENT_IMAGE
+        WHERE BUSINESS_NO = #{businessNo}
+    </select>
+
+    <!-- 특정 WorkEnvironmentImage 조회 -->
+    <select id="selectWorkEnvironmentImageById" parameterType="int" resultType="WorkEnvironmentImage">
+        SELECT
+            WORK_ENVIRONMENT_IMAGE_NO AS workEnvironmentImageNo,
+            BUSINESS_NO AS businessNo,
+            IMAGE_URL AS imageUrl,
+            TITLE AS title
+        FROM WORK_ENVIRONMENT_IMAGE
+        WHERE WORK_ENVIRONMENT_IMAGE_NO = #{workEnvironmentImageNo}
+    </select>
+
+    <!-- WorkEnvironmentImage 업데이트 -->
+    <update id="updateWorkEnvironmentImage" parameterType="WorkEnvironmentImage">
+        UPDATE WORK_ENVIRONMENT_IMAGE
+        SET
+            IMAGE_URL = #{imageUrl},
+            TITLE = #{title}
+        WHERE WORK_ENVIRONMENT_IMAGE_NO = #{workEnvironmentImageNo}
+    </update>
+    
+    <!-- WorkEnvironmentImage 삭제 -->
+    <delete id="deleteWorkEnvironmentImageById" parameterType="int">
+        DELETE FROM WORK_ENVIRONMENT_IMAGE WHERE WORK_ENVIRONMENT_IMAGE_NO = #{workEnvironmentImageNo}
+    </delete>
+</mapper>
